@@ -9,7 +9,7 @@ namespace AcleUrbanGardens.Web.Migrations.AcleUrbanGardensDbContext
 
     /// <summary>
     /// Run following in package manager console to enable migrations
-    /// Enable-Migrations -ContextTypeName AcleUrbanGardens.Web.Infrastructure.AcleUrbanGardensDb -MigrationsDirectory Migrations\AcleUrbanGardensDbContext -Force
+    /// Enable-Migrations -ContextTypeName AcleUrbanGardens.Web.Infrastructure.AcleUrbanGardensDb -MigrationsDirectory Migrations\AcleUrbanGardensDbContext -Verbose
     /// Run following in package manager console to update-database
     /// Update-Database -ConfigurationTypeName AcleUrbanGardens.Web.Migrations.AcleUrbanGardensDbContext.Configuration -Verbose
     /// </summary>

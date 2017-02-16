@@ -10,9 +10,9 @@ namespace AcleUrbanGardens.Web.Migrations.ApplicationDbContext
 
     /// <summary>
     /// Run following in package manager console to enable migrations
-    /// Enable-Migrations -ContextTypeName AcleUrbanGardens.Web.Models.ApplicationDbContext -MigrationsDirectory Migrations\ApplicationDbContext -Force
+    /// Enable-Migrations -ContextTypeName AcleUrbanGardens.Web.Models.ApplicationDbContext -MigrationsDirectory Migrations\ApplicationDbContext -Verbose
     /// Run following in package manager console to update-database
-    /// Update-Database -ConfigurationTypeName AcleUrbanGardens.Web.Migrations.ApplicationDbContext.Configuration
+    /// Update-Database -ConfigurationTypeName AcleUrbanGardens.Web.Migrations.ApplicationDbContext.Configuration -Verbose
     /// </summary>
     internal sealed class Configuration : DbMigrationsConfiguration<AcleUrbanGardens.Web.Models.ApplicationDbContext>
     {
