@@ -1,0 +1,85 @@
+﻿@model AcleUrbanGardens.Domain.Category
+
+@{
+    ViewBag.Title = Model.Name;
+    ViewBag.ErrorMessage = "You cannot delete the category " + Model.Name;
+}
+
+<h1 class="warning">@ViewBag.ErrorMessage</h1>
+<p>The Category @Model.Name is a reserved Category. It is used as a default category to prevent products being deleted from the system if a Category is accidently deleted when products are still atached to the Category.</p>
+<div>
+    <h2>@ViewBag.Title Detail</h2>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdateDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+<div>
+    <h3>Products that are included in the @Model.Name Category</h3>
+    @if (Model.Products.Count > 0)
+    {
+        <ul>
+            @foreach(var product in Model.Products)
+            {
+                <li>@Html.ActionLink(@product.Name, "Details", "Product", new { Id = @product.Id }, null)</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <ul>
+            <li>There are no Products in the @Model.Name category.</li>
+        </ul>
+    }
+</div>
+

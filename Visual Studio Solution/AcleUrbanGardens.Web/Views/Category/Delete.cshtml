@@ -1,0 +1,87 @@
+﻿@model AcleUrbanGardens.Web.Models.DeleteCategoryViewModel
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h2>Delete @ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdateDate)
+        </dd>
+
+    </dl>
+
+    @{  
+        if (Model.Products.Count(p => p.CategoryId == Model.Id) > 0 )
+        {
+            <h3>The Category @Model.Name is linked to the following Products:</h3>
+            <ul>
+                @foreach (var product in Model.Products)
+                {
+                    <li>@Html.ActionLink(product.Name, "Details", "Product", new { Id = product.Id }, null)</li>
+                }
+            </ul>
+            <p>If you delete the category @Model.Name, the products above will be moved to the @Model.UnassignedCategory category.</p>
+            
+        }
+    }
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index") |
+            @Html.ActionLink("Back to Detail", "Details", new { Id = Model.Id }, null)
+        </div>
+    }
+</div>

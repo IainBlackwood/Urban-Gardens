@@ -1,0 +1,32 @@
+﻿@model AcleUrbanGardens.Web.Models.DeleteAllProductsByCategory
+
+@{
+    ViewBag.Title = "TODO:";
+}
+
+<h2>Are you sure you want to delete all products from the following category: @ViewBag.Title</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.products.First().Name)
+        </th>
+    </tr>
+
+@foreach (var item in Model.products) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+    </tr>
+}
+</table>
+
+@using (Html.BeginForm("DeleteAllProductsByCategory", "Product", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div>
+        @Html.Hidden("CategoryId", Model.CategoryId)
+        <input type="submit" value="Delete All" class="btn btn-default" />
+    </div>
+}
