@@ -8,8 +8,10 @@ namespace AcleUrbanGardens.Web.Migrations.AcleUrbanGardensDbContext
 
 
     /// <summary>
-    /// Run following in package manager console to updat-database
-    /// Update-Database -ConfigurationTypeName AcleUrbanGardens.Web.Migrations.AcleUrbanGardensDbContext.Configuration
+    /// Run following in package manager console to enable migrations
+    /// Enable-Migrations -ContextTypeName AcleUrbanGardens.Web.Infrastructure.AcleUrbanGardensDb -MigrationsDirectory Migrations\AcleUrbanGardensDbContext -Force
+    /// Run following in package manager console to update-database
+    /// Update-Database -ConfigurationTypeName AcleUrbanGardens.Web.Migrations.AcleUrbanGardensDbContext.Configuration -Verbose
     /// </summary>
     internal sealed class Configuration : DbMigrationsConfiguration<AcleUrbanGardens.Web.Infrastructure.AcleUrbanGardensDb>
     {

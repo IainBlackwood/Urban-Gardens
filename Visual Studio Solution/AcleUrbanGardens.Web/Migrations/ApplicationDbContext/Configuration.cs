@@ -9,7 +9,9 @@ namespace AcleUrbanGardens.Web.Migrations.ApplicationDbContext
     using System.Linq;
 
     /// <summary>
-    /// Run following in package manager console to updat-database
+    /// Run following in package manager console to enable migrations
+    /// Enable-Migrations -ContextTypeName AcleUrbanGardens.Web.Models.ApplicationDbContext -MigrationsDirectory Migrations\ApplicationDbContext -Force
+    /// Run following in package manager console to update-database
     /// Update-Database -ConfigurationTypeName AcleUrbanGardens.Web.Migrations.ApplicationDbContext.Configuration
     /// </summary>
     internal sealed class Configuration : DbMigrationsConfiguration<AcleUrbanGardens.Web.Models.ApplicationDbContext>
