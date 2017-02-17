@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace AcleUrbanGardens.Web.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
           
@@ -24,6 +25,7 @@ namespace AcleUrbanGardens.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
