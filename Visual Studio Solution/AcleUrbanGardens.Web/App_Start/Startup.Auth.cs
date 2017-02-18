@@ -47,14 +47,14 @@ namespace AcleUrbanGardens.Web
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            app.UseMicrosoftAccountAuthentication(
+                clientId: System.Configuration.ConfigurationManager.AppSettings["MicrosoftOAuthClientID"],
+                clientSecret: System.Configuration.ConfigurationManager.AppSettings["MicrosoftOAuthClientSecret"]);
 
             app.UseTwitterAuthentication(new TwitterAuthenticationOptions
             {
-                ConsumerKey = System.Configuration.ConfigurationManager.AppSettings["TwitterOAuthAPIKey"],
-                ConsumerSecret = System.Configuration.ConfigurationManager.AppSettings["TwitterOAuthAPISecret"],
+                ConsumerKey = System.Configuration.ConfigurationManager.AppSettings["TwitterOAuthConsumerKey"],
+                ConsumerSecret = System.Configuration.ConfigurationManager.AppSettings["TwitterOAuthConsumerSecret"],
                 BackchannelCertificateValidator = null
             });
 

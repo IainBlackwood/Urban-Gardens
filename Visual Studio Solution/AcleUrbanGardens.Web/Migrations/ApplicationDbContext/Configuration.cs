@@ -78,7 +78,21 @@ namespace AcleUrbanGardens.Web.Migrations.ApplicationDbContext
                     PasswordHash = new PasswordHasher().HashPassword("Password03!")
                 };
                 userManager.Create(user);
-                userManager.AddToRole(user.Id, "user");
+                //userManager.AddToRole(user.Id, "user");
+            }
+
+            // test user ii
+            if (!context.Users.Any(u => u.UserName == "test_oauth@outlook.com"))
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "test_oauth@outlook.com",
+                    Email = "test_oauth@outlook.com",
+                    EmailConfirmed = true,
+                    PasswordHash = new PasswordHasher().HashPassword("Password04!")
+                };
+                userManager.Create(user);
+                //userManager.AddToRole(user.Id, "user");
             }
         }
     }
