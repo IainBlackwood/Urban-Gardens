@@ -58,11 +58,11 @@ namespace AcleUrbanGardens.Web
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = System.Configuration.ConfigurationManager.AppSettings["GoogleOAuthClientID"],
+                ClientSecret = System.Configuration.ConfigurationManager.AppSettings["GoogleOAuthClientSecret"]
+            });
         }
     }
 }
