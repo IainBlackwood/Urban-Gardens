@@ -54,9 +54,9 @@ namespace AcleUrbanGardens.Web
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: System.Configuration.ConfigurationManager.AppSettings["FacebookOAuthAppID"],
+               appSecret: System.Configuration.ConfigurationManager.AppSettings["FacebookOAuthClientSecret"]);
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
