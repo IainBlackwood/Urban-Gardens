@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using AcleUrbanGardens.Web.Models;
+using Microsoft.Owin.Security.Twitter;
 
 namespace AcleUrbanGardens.Web
 {
@@ -50,9 +51,12 @@ namespace AcleUrbanGardens.Web
             //    clientId: "",
             //    clientSecret: "");
 
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
+            app.UseTwitterAuthentication(new TwitterAuthenticationOptions
+            {
+                ConsumerKey = System.Configuration.ConfigurationManager.AppSettings["TwitterOAuthAPIKey"],
+                ConsumerSecret = System.Configuration.ConfigurationManager.AppSettings["TwitterOAuthAPISecret"],
+                BackchannelCertificateValidator = null
+            });
 
             app.UseFacebookAuthentication(
                appId: System.Configuration.ConfigurationManager.AppSettings["FacebookOAuthAppID"],
