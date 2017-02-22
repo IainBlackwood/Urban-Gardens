@@ -307,6 +307,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Models\DetailsCategoryViewModel.cs" />
     <Compile Include="Migrations\AcleUrbanGardensDbContext\Configuration.cs" />
     <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
     <Compile Include="Models\CreateSubCategoryViewModel.cs" />
@@ -342,6 +343,35 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\logo.jpg" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_100.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_1024.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_114.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_144.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_29.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_50.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_57.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_58.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_72.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_100.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_1024.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_114.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_144.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_29.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_50.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_512.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_57.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_58.png" />
+    <Content Include="Content\Images\Social\Facebook\FB-f-Logo__white_72.png" />
+    <Content Include="Content\Images\Social\Google\btn_google_signin_dark_disabled_web%402x.png" />
+    <Content Include="Content\Images\Social\Google\btn_google_signin_dark_focus_web%402x.png" />
+    <Content Include="Content\Images\Social\Google\btn_google_signin_dark_normal_web%402x.png" />
+    <Content Include="Content\Images\Social\Google\btn_google_signin_dark_pressed_web%402x.png" />
+    <Content Include="Content\Images\Social\Google\btn_google_signin_light_disabled_web%402x.png" />
+    <Content Include="Content\Images\Social\Google\btn_google_signin_light_focus_web%402x.png" />
+    <Content Include="Content\Images\Social\Google\btn_google_signin_light_normal_web%402x.png" />
+    <Content Include="Content\Images\Social\Google\btn_google_signin_light_pressed_web%402x.png" />
+    <Content Include="Content\Images\Social\Twitter\Twitter_Logo_White_On_Blue.png" />
+    <Content Include="Content\Images\Social\Twitter\Twitter_Social_Icon_Rounded_Square_Color.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -351,6 +381,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\acle-urban-gardens-dev.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -427,6 +458,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Images\Social\Microsoft\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

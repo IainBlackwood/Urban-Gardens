@@ -51,6 +51,18 @@ namespace AcleUrbanGardens.Web
                 clientId: System.Configuration.ConfigurationManager.AppSettings["MicrosoftOAuthClientID"],
                 clientSecret: System.Configuration.ConfigurationManager.AppSettings["MicrosoftOAuthClientSecret"]);
 
+            //TODO: Fix issues with Microsoft Authentication, commented out as not working currently: Investigate
+            //app.UseMicrosoftAccountAuthentication(new Microsoft.Owin.Security.MicrosoftAccount.MicrosoftAccountAuthenticationOptions
+            //{
+            //    ClientId = System.Configuration.ConfigurationManager.AppSettings["MicrosoftOAuthClientID"],
+            //    ClientSecret = System.Configuration.ConfigurationManager.AppSettings["MicrosoftOAuthClientSecret"],
+            //    CallbackPath = new PathString("/signin-microsoft"),
+            //    AuthenticationType = "Microsoft",
+            //    AuthenticationMode = Microsoft.Owin.Security.AuthenticationMode.Passive,
+            //    Caption = "This is the caption"
+            //});
+
+            // TODO: Twitter and Facebook not currently returning a email address (Was working: why is this happening???)
             app.UseTwitterAuthentication(new TwitterAuthenticationOptions
             {
                 ConsumerKey = System.Configuration.ConfigurationManager.AppSettings["TwitterOAuthConsumerKey"],

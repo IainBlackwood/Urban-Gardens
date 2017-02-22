@@ -1,9 +1,9 @@
 ﻿@model AcleUrbanGardens.Web.Models.DeleteCategoryViewModel
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = Model.Category.Name;
 }
-
+<!--detail-->
 <h2>Delete @ViewBag.Title</h2>
 
 <h3>Are you sure you want to delete this?</h3>
@@ -11,77 +11,140 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Category.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Category.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Category.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Category.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedBy)
+            @Html.DisplayNameFor(model => model.CreatedByUsername)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreatedBy)
+            @Html.DisplayFor(model => model.CreatedByUsername)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreateDate)
+            @Html.DisplayNameFor(model => model.Category.CreateDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreateDate)
+            @Html.DisplayFor(model => model.Category.CreateDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UpdatedBy)
+            @Html.DisplayNameFor(model => model.UpdatedByUsername)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UpdatedBy)
+            @Html.DisplayFor(model => model.UpdatedByUsername)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UpdateDate)
+            @Html.DisplayNameFor(model => model.Category.UpdateDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UpdateDate)
+            @Html.DisplayFor(model => model.Category.UpdateDate)
         </dd>
 
     </dl>
+</div>
 
-    @{  
-        if (Model.Products.Count(p => p.CategoryId == Model.Id) > 0 )
+<!--Products in this category-->
+<div>
+    @{
+
+        if (Model.Products != null)
         {
-            <h3>The Category @Model.Name is linked to the following Products:</h3>
-            <ul>
-                @foreach (var product in Model.Products)
-                {
-                    <li>@Html.ActionLink(product.Name, "Details", "Product", new { Id = product.Id }, null)</li>
-                }
-            </ul>
-            <p>If you delete the category @Model.Name, the products above will be moved to the @Model.UnassignedCategory category.</p>
-            
+            if (Model.Products.Count(p => p.CategoryId == Model.Category.Id) > 0)
+            {
+                <h3>The Category @Model.Category.Name is linked to the following Products:</h3>
+                <ul>
+                    @foreach (var product in Model.Products)
+                    {
+                        <li>@product.Name</li>
+                    }
+                </ul>
+                <p>If you delete the category @Model.Category.Name, the products above will be moved to the @Model.UnassignedCategory category.</p>
+
+            }
+            else
+            {
+                <h3>The Category @Model.Category.Name is not linked to any Products</h3>
+            }
+        }
+        else
+        {
+            <h3>The Category @Model.Category.Name is not linked to any Products</h3>
         }
     }
+</div>
 
-    @using (Html.BeginForm()) {
+<!--Sub-Categories-->
+<div>
+    <h3>The Category @Model.Category.Name has the following Sub-Categories</h3>
+    @{
+        if (Model.Category.Children.Count > 0)
+        {
+            foreach (var category in Model.Category.Children)
+            {
+                <div>
+                    <h4>
+                        @category.Name
+                    </h4>
+                    <p>Products attached to the Sub-Category</p>
+                    <ul>
+                        @{
+                            if (category.Products.Count() > 0)
+                            {
+                                foreach (var product in category.Products)
+                                {
+                                    <li>@product.Name</li>
+                                }
+                            }
+                            else
+                            {
+                                <li>There are no Products in the @category.Name sub-category</li>
+                            }
+
+                        }
+
+                    </ul>
+                </div>
+            }
+        }
+        else
+        {
+            <div>
+                <label>There are no sub categories</label>
+            </div>
+        }
+    }
+</div>
+
+<!--Return Links-->
+<div>
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index") |
-            @Html.ActionLink("Back to Detail", "Details", new { Id = Model.Id }, null)
+            @Html.ActionLink("Back to Detail", "Details", new { Id = Model.Category.Id }, null)
         </div>
     }
 </div>
+
+

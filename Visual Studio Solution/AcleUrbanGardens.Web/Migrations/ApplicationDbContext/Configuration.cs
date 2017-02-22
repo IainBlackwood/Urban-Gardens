@@ -40,6 +40,7 @@ namespace AcleUrbanGardens.Web.Migrations.ApplicationDbContext
             {
                 var user = new ApplicationUser
                 {
+                    Id = System.Configuration.ConfigurationManager.AppSettings["MasterAdminGuid"],
                     UserName = "iblackwoodhome@btconnect.com",
                     Email = "iblackwoodhome@btconnect.com",
                     EmailConfirmed = false,
@@ -56,6 +57,7 @@ namespace AcleUrbanGardens.Web.Migrations.ApplicationDbContext
             {
                 var user = new ApplicationUser
                 {
+                    Id = System.Configuration.ConfigurationManager.AppSettings["AcleAdminGuid"],
                     UserName = "acle.urbangardens@hotmail.com",
                     Email = "acle.urbangardens@hotmail.com",
                     EmailConfirmed = true,
@@ -76,20 +78,6 @@ namespace AcleUrbanGardens.Web.Migrations.ApplicationDbContext
                     Email = "flakboy@hotmail.co.uk",
                     EmailConfirmed = true,
                     PasswordHash = new PasswordHasher().HashPassword("Password03!")
-                };
-                userManager.Create(user);
-                //userManager.AddToRole(user.Id, "user");
-            }
-
-            // test user ii
-            if (!context.Users.Any(u => u.UserName == "test_oauth@outlook.com"))
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = "test_oauth@outlook.com",
-                    Email = "test_oauth@outlook.com",
-                    EmailConfirmed = true,
-                    PasswordHash = new PasswordHasher().HashPassword("Password04!")
                 };
                 userManager.Create(user);
                 //userManager.AddToRole(user.Id, "user");

@@ -1,8 +1,8 @@
-﻿@model AcleUrbanGardens.Domain.Category
+﻿@model AcleUrbanGardens.Web.Models.DetailsCategoryViewModel
 
 @{
-    ViewBag.Title = Model.Name;
-    ViewBag.CreateProductMessage = "Create a new " + Model.Name + " product";
+    ViewBag.Title = Model.Category.Name;
+    ViewBag.CreateProductMessage = "Create a new " + Model.Category.Name + " product";
 }
 
 <div>
@@ -10,59 +10,59 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Category.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Category.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Category.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Category.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedBy)
+            @Html.DisplayNameFor(model => model.CreatedByUsername)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreatedBy)
+            @Html.DisplayFor(model => model.CreatedByUsername)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreateDate)
+            @Html.DisplayNameFor(model => model.Category.CreateDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreateDate)
+            @Html.DisplayFor(model => model.Category.CreateDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UpdatedBy)
+            @Html.DisplayNameFor(model => model.UpdatedByUsername)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UpdatedBy)
+            @Html.DisplayFor(model => model.UpdatedByUsername)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UpdateDate)
+            @Html.DisplayNameFor(model => model.Category.UpdateDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UpdateDate)
+            @Html.DisplayFor(model => model.Category.UpdateDate)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Category.Id }) |
     @Html.ActionLink("Back to List", "Index") |
-    @Html.ActionLink("Delete", "Delete", "Category", new { id = Model.Id }, null)
+    @Html.ActionLink("Delete", "Delete", "Category", new { id = Model.Category.Id }, null)
 </p>
 
 <div class="row">
@@ -72,11 +72,11 @@
 </div>
 
 <div>
-    <h3>The Category @Model.Name has the following Sub-Categories</h3>
+    <h3>The Category @Model.Category.Name has the following Sub-Categories</h3>
     @{
-        if (Model.Children.Count > 0)
+        if (Model.Category.Children.Count > 0)
         {
-            foreach (var category in Model.Children)
+            foreach (var category in Model.Category.Children)
             {
                 <div>
                     <h4>
@@ -114,11 +114,11 @@
 
 
 <div>
-    <h3>Products that are included in the @Model.Name Category</h3>
-    @if (Model.Products.Count > 0)
+    <h3>Products that are included in the @Model.Category.Name Category</h3>
+    @if (Model.Category.Products.Count > 0)
     {
         <ul>
-            @foreach(var product in Model.Products)
+            @foreach(var product in Model.Category.Products)
             {
                 <li>@Html.ActionLink(@product.Name, "Details", "Product", new { Id = @product.Id }, null)</li>
             }
@@ -127,9 +127,9 @@
     else
     {
         <ul>
-            <li>There are no Products in the @Model.Name category.</li>
+            <li>There are no Products in the @Model.Category.Name category.</li>
         </ul>
     }
-    @Html.ActionLink((string)ViewBag.CreateProductMessage, "Create", "Product", new { categoryId = Model.Id }, null)
+    @Html.ActionLink((string)ViewBag.CreateProductMessage, "Create", "Product", new { categoryId = Model.Category.Id }, null)
 </div>
 

@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using AcleUrbanGardens.Domain;
 using AcleUrbanGardens.Web.Infrastructure;
 using AcleUrbanGardens.Web.Models;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace AcleUrbanGardens.Web.Controllers
 {
@@ -16,10 +18,12 @@ namespace AcleUrbanGardens.Web.Controllers
     public class CategoryController : Controller
     {
         private AcleUrbanGardensDb _db;
+        private static ApplicationDbContext _applicationDb;
 
-        public CategoryController(AcleUrbanGardensDb db)
+        public CategoryController(AcleUrbanGardensDb db, ApplicationDbContext applicationDb)
         {
             _db = db;
+            _applicationDb = applicationDb;
         }
 
         // GET: Category
@@ -53,8 +57,20 @@ namespace AcleUrbanGardens.Web.Controllers
                 category.Children = GetChildren(category.Children, id);
             }
 
+            // create the viewModel
+            var viewModel = new DetailsCategoryViewModel();
+            // set the viewModels Category
+            viewModel.Category = category;
 
-            return View(category);
+            if(category.CreatedBy != null)
+                viewModel.CreatedByUsername = _applicationDb.Users.Find(category.CreatedBy).UserName;
+
+            if (category.UpdatedBy != null)
+                viewModel.UpdatedByUsername = _applicationDb.Users.Find(category.UpdatedBy).UserName;
+            else
+                viewModel.UpdatedByUsername = string.Empty;
+
+            return View(viewModel);
         }
 
         private ICollection<Category> GetChildren(ICollection<Category> children, int? id)
@@ -75,7 +91,8 @@ namespace AcleUrbanGardens.Web.Controllers
         {
             var model = new CreateCategoryViewModel();
             // get the user role 
-            model.CreatedBy = "Admin";
+            model.CreatedBy = User.Identity.GetUserId();
+
             // need to initialise the date. it will get reset when the category is saved to the database with upto date datetime value
             model.CreateDate = DateTime.UtcNow;
             return View(model);
@@ -120,14 +137,16 @@ namespace AcleUrbanGardens.Web.Controllers
             {
                 return HttpNotFound();
             }
-            var model = new EditCategoryViewModel();
-            model.Id = category.Id;
-            model.Name = category.Name;
-            model.Description = category.Description;
-            model.CreateDate = category.CreateDate;
-            model.CreatedBy = category.CreatedBy;
-            model.UpdateDate = category.UpdateDate;
-            model.UpdatedBy = category.UpdatedBy;
+            var model = new EditCategoryViewModel
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                CreateDate = category.CreateDate,
+                CreatedBy = category.CreatedBy,
+                UpdateDate = category.UpdateDate,
+                UpdatedBy = category.UpdatedBy
+            };
 
             return View(model);
         }
@@ -148,7 +167,7 @@ namespace AcleUrbanGardens.Web.Controllers
                 category.CreateDate = categoryViewModel.CreateDate;
                 category.CreatedBy = categoryViewModel.CreatedBy;
                 category.UpdateDate = DateTime.UtcNow;
-                category.UpdatedBy = "Admin"; // add roles code
+                category.UpdatedBy = User.Identity.GetUserId();
                 _db.Entry(category).State = EntityState.Modified;
                 _db.SaveChanges();
                 return RedirectToAction("Details", new { Id = category.Id });
@@ -177,26 +196,50 @@ namespace AcleUrbanGardens.Web.Controllers
             }
             
             // if the category is Unassigned-Products
-            if(category.Name == Constants.CATEGORY_UNASSIGNED_PRODUCTS)
+            if(category.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS)
             {
                 return RedirectToAction("ErrorDeleteUnassignedCategory", new { id = category.Id });
             }
             else
             {
                 // create the delete category view model
-                var viewModel = new DeleteCategoryViewModel();
+                var viewModel = new DeleteCategoryViewModel
+                {
+                    // create the category 
+                    Category = new Category
+                    {
+                        // assign the category values to the view model
+                        Id = category.Id,
+                        Name = category.Name,
+                        Description = category.Description,
+                        Products = category.Products,
+                        CreateDate = category.CreateDate,
+                        CreatedBy = category.CreatedBy,
+                        UpdateDate = category.UpdateDate,
+                        UpdatedBy = category.UpdatedBy
+                    },
+                    // set some values to handle unassigned products
+                    UnassignedCategoryId = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id,
+                    UnassignedCategory = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Name
+                };
 
-                // assign the category values to the view model
-                viewModel.Id = category.Id;
-                viewModel.Name = category.Name;
-                viewModel.Description = category.Description;
-                viewModel.CreateDate = category.CreateDate;
-                viewModel.CreatedBy = category.CreatedBy;
-                viewModel.UpdateDate = category.UpdateDate;
-                viewModel.UpdatedBy = category.UpdatedBy;
-                viewModel.UnassignedCategoryId = _db.Categories.Single(c => c.Name == Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id;
-                viewModel.UnassignedCategory = _db.Categories.Single(c => c.Name == Constants.CATEGORY_UNASSIGNED_PRODUCTS).Name;
-                viewModel.Products = category.Products;
+                viewModel.Category.Children = _db.Categories.Where(c => c.ParentId == id).OrderBy(c => c.Name).ToList();
+                // if we got some children 
+                if (viewModel.Category.Children.Count > 0)
+                {
+                    // get any further sub categories
+                    viewModel.Category.Children = GetChildren(viewModel.Category.Children, id);
+                }
+
+                // set the created by username / email value
+                if (category.CreatedBy != null)
+                    viewModel.CreatedByUsername = _applicationDb.Users.Find(category.CreatedBy).UserName;
+
+                // set the updated by username / email value
+                if (category.UpdatedBy != null)
+                    viewModel.UpdatedByUsername = _applicationDb.Users.Find(category.UpdatedBy).UserName;
+                else
+                    viewModel.UpdatedByUsername = string.Empty;
 
                 // return the model to the view
                 return View(viewModel);
@@ -223,7 +266,30 @@ namespace AcleUrbanGardens.Web.Controllers
                 return HttpNotFound();
             }
 
-            return View(category);
+            var viewModel = new DeleteCategoryViewModel
+            {
+                Category = new Category
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    Description = category.Description,
+                    CreatedBy = category.CreatedBy,
+                    CreateDate = category.CreateDate,
+                    UpdatedBy = category.UpdatedBy,
+                    UpdateDate = category.UpdateDate,
+                    Products = category.Products
+                }
+            };
+
+            if (category.CreatedBy != null)
+                viewModel.CreatedByUsername = _applicationDb.Users.Find(category.CreatedBy).UserName;
+
+            if (category.UpdatedBy != null)
+                viewModel.UpdatedByUsername = _applicationDb.Users.Find(category.UpdatedBy).UserName;
+            else
+                viewModel.UpdatedByUsername = string.Empty;
+
+            return View(viewModel);
         }
 
         // POST: Category/Delete/5
@@ -233,6 +299,14 @@ namespace AcleUrbanGardens.Web.Controllers
         {
             // get the category to be deleted from the db
             Category category = _db.Categories.Find(id);
+
+            // if the category is null
+            if (category == null)
+            {
+                // return 404
+                return HttpNotFound();
+            }
+
             // get list of products
             var products = _db.Products;
 
@@ -243,7 +317,7 @@ namespace AcleUrbanGardens.Web.Controllers
                 if (product.CategoryId == id)
                 {
                     // set the products category to the default (Unassigned-Products)
-                    product.CategoryId = _db.Categories.Single(c => c.Id == 16).Id;
+                    product.CategoryId = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id;
                     // set the products state to modified so save changes will cause data to be
                     _db.Entry(product).State = EntityState.Modified;
                 }
@@ -265,7 +339,7 @@ namespace AcleUrbanGardens.Web.Controllers
 
             var viewModel = new CreateSubCategoryViewModel();
             // get the user role 
-            viewModel.CreatedBy = "Admin";
+            viewModel.CreatedBy = User.Identity.GetUserId();
             // need to initialise the date. it will get reset when the category is saved to the database with upto date datetime value
             viewModel.CreateDate = DateTime.UtcNow;
             viewModel.ParentId = categoryId;
@@ -285,7 +359,7 @@ namespace AcleUrbanGardens.Web.Controllers
                 category.Name = viewModel.Name;
                 category.Description = viewModel.Description;
                 category.CreateDate = DateTime.UtcNow;
-                category.CreatedBy = "Admin";
+                category.CreatedBy = User.Identity.GetUserId();
                 category.ParentId = viewModel.ParentId;
 
                 _db.Categories.Add(category);

@@ -5,6 +5,7 @@ namespace AcleUrbanGardens.Web.Migrations.AcleUrbanGardensDbContext
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using Models;
 
 
     /// <summary>
@@ -27,7 +28,7 @@ namespace AcleUrbanGardens.Web.Migrations.AcleUrbanGardensDbContext
             context.Categories.AddOrUpdate(c => c.Name,
                 new Category()
                 {
-                    Name = "Unassigned-Products",
+                    Name = Constants.CATEGORY_UNASSIGNED_PRODUCTS,
                     Description = "DO NOT DELETE - This category is used to store any products that were attached to a Category that was deleted",
                     CreatedBy = "Admin",
                     CreateDate = DateTime.UtcNow

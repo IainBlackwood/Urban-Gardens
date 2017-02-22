@@ -1,62 +1,62 @@
-﻿@model AcleUrbanGardens.Domain.Category
+﻿@model AcleUrbanGardens.Web.Models.DeleteCategoryViewModel
 
 @{
-    ViewBag.Title = Model.Name;
-    ViewBag.ErrorMessage = "You cannot delete the category " + Model.Name;
+    ViewBag.Title = Model.Category.Name;
+    ViewBag.ErrorMessage = "You cannot delete the category " + Model.Category.Name;
 }
 
 <h1 class="warning">@ViewBag.ErrorMessage</h1>
-<p>The Category @Model.Name is a reserved Category. It is used as a default category to prevent products being deleted from the system if a Category is accidently deleted when products are still atached to the Category.</p>
+<p>The Category @Model.Category.Name is a reserved Category. It is used as a default category to prevent products being deleted from the system if a Category is accidently deleted when products are still atached to the Category.</p>
 <div>
     <h2>@ViewBag.Title Detail</h2>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Category.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Category.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Category.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Category.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedBy)
+            @Html.DisplayNameFor(model => model.CreatedByUsername)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreatedBy)
+            @Html.DisplayFor(model => model.CreatedByUsername)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreateDate)
+            @Html.DisplayNameFor(model => model.Category.CreateDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreateDate)
+            @Html.DisplayFor(model => model.Category.CreateDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UpdatedBy)
+            @Html.DisplayNameFor(model => model.UpdatedByUsername)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UpdatedBy)
+            @Html.DisplayFor(model => model.UpdatedByUsername)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UpdateDate)
+            @Html.DisplayNameFor(model => model.Category.UpdateDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UpdateDate)
+            @Html.DisplayFor(model => model.Category.UpdateDate)
         </dd>
 
     </dl>
@@ -65,7 +65,7 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 <div>
-    <h3>Products that are included in the @Model.Name Category</h3>
+    <h3>Products that are included in the @Model.Category.Name Category</h3>
     @if (Model.Products.Count > 0)
     {
         <ul>
@@ -78,7 +78,7 @@
     else
     {
         <ul>
-            <li>There are no Products in the @Model.Name category.</li>
+            <li>There are no Products in the @Model.Category.Name category.</li>
         </ul>
     }
 </div>
