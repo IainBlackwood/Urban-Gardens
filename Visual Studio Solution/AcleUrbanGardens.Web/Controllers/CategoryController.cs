@@ -29,7 +29,7 @@ namespace AcleUrbanGardens.Web.Controllers
         // GET: Category
         public ActionResult Index()
         {
-            return View(_db.Categories.ToList().Where(c => c.ParentId == null).OrderBy(c => c.Name));
+            return View(_db.Categories.ToList().Where(c => c.ParentId == null && c.IsDeleted == false).OrderBy(c => c.Name));
         }
 
         // GET: Category/Details/5
@@ -39,6 +39,7 @@ namespace AcleUrbanGardens.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Category category = _db.Categories.Find(id);
             if (category == null)
             {
@@ -61,6 +62,12 @@ namespace AcleUrbanGardens.Web.Controllers
             var viewModel = new DetailsCategoryViewModel();
             // set the viewModels Category
             viewModel.Category = category;
+
+            // if we are a child category (sub-category)
+            if(category.ParentId != null)
+            {
+                viewModel.Parent = _db.Categories.Find(category.ParentId);
+            }
 
             if(category.CreatedBy != null)
                 viewModel.CreatedByUsername = _applicationDb.Users.Find(category.CreatedBy).UserName;
@@ -223,6 +230,9 @@ namespace AcleUrbanGardens.Web.Controllers
                     UnassignedCategory = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Name
                 };
 
+                // get the main category we are looking at list of products
+                viewModel.Products = _db.Products.Where(p => p.CategoryId == id).ToList();
+
                 viewModel.Category.Children = _db.Categories.Where(c => c.ParentId == id).OrderBy(c => c.Name).ToList();
                 // if we got some children 
                 if (viewModel.Category.Children.Count > 0)
@@ -308,22 +318,31 @@ namespace AcleUrbanGardens.Web.Controllers
             }
 
             // get list of products
-            var products = _db.Products;
+            var products = _db.Products.Where(p => p.CategoryId == id);
+            int unassignedCategoryId = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id;
 
             // for each product in list of products
             foreach (Product product in products)
             {
-                // if the product category is the one we are deleting
-                if (product.CategoryId == id)
-                {
-                    // set the products category to the default (Unassigned-Products)
-                    product.CategoryId = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id;
-                    // set the products state to modified so save changes will cause data to be
-                    _db.Entry(product).State = EntityState.Modified;
-                }
+                // set the products category to the default (Unassigned-Products)
+                product.CategoryId = unassignedCategoryId;
+                // set the products state to modified so save changes will cause data to be
+                _db.Entry(product).State = EntityState.Modified;
             }
 
-            _db.Categories.Remove(category);
+            // now find the sub-categories { we only need to get 1 level down and keep the structure }
+            category.Children = _db.Categories.Where(c => c.Id == category.Id).ToList();
+            // for each category child
+            foreach(Category childCategory in category.Children)
+            {
+                childCategory.ParentId = unassignedCategoryId;
+                _db.Entry(childCategory).State = EntityState.Modified;
+            }
+
+            // finally delete the category (Set the IsDeleted Flag)
+            //_db.Categories.Remove(category);
+            category.IsDeleted = true;
+            _db.Entry(category).State = EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

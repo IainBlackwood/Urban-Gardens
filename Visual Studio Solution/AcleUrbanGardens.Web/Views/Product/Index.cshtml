@@ -29,7 +29,7 @@
             @Html.ActionLink(product.Name, "Details", "Product", new { product.Id }, null)
         </td>
         <td>
-            @Model.Categories.Single(c => c.Id == product.CategoryId).Name
+            @*TODO: INVESTIGATE BUG @Model.Categories.Single(c => c.Id == product.CategoryId).Name*@
         </td>
     </tr>
 }

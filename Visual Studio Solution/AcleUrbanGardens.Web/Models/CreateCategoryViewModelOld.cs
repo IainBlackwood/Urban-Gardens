@@ -4,12 +4,8 @@ using System.Web.Mvc;
 
 namespace AcleUrbanGardens.Web.Models
 {
-    public class EditCategoryViewModel
+    public class CreateCategoryViewModelOld
     {
-        [Required]
-        [HiddenInput(DisplayValue = false)]
-        public virtual int Id { get; set; }
-
         [Required]
         public virtual string Name { get; set; }
 

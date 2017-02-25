@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace AcleUrbanGardens.Web.Models
 {
-    public class DeleteAllProductsByCategory
+    public class DeleteAllProductsByCategoryOld
     {
         public IQueryable<Product> products { get; set; }
 

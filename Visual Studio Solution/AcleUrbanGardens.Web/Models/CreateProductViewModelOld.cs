@@ -1,15 +1,15 @@
-﻿using System;
+﻿using AcleUrbanGardens.Domain;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace AcleUrbanGardens.Web.Models
 {
-    public class EditProductViewModel
+    public class CreateProductViewModelOld
     {
-        [Required]
-        public virtual int Id { get; set; }
-
         [Required]
         [Display(Name = "Product Name")]
         public virtual string Name { get; set; }
@@ -58,6 +58,6 @@ namespace AcleUrbanGardens.Web.Models
         [Display(Name = "Selected Category")]
         public virtual SelectListItem SelectedCategory { get; set; }
 
-        public virtual bool FromCategoryDetail { get; set; }
+        public virtual bool CreatedFromCategoryDetail { get; set; }
     }
 }

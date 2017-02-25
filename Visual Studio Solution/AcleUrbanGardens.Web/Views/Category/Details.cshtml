@@ -1,135 +1,190 @@
 ﻿@model AcleUrbanGardens.Web.Models.DetailsCategoryViewModel
 
 @{
-    ViewBag.Title = Model.Category.Name;
+    ViewBag.Title = Model.Category.Name + " Detail";
     ViewBag.CreateProductMessage = "Create a new " + Model.Category.Name + " product";
 }
+<style>
+    #accordion-resizer {
+        padding: 10px;
+        width: 350px;
+        height: 220px;
+    }
+</style>
+<script>
+  $( function() {
+      $("#categoryAccordion").accordion({
+          heightStyle: "content",
+          collapsible: true,
+          active: false
+    });
 
-<div>
-    <h2>@ViewBag.Title Detail</h2>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.Name)
-        </dt>
+      $("#productAccordion").accordion({
+          heightStyle: "content",
+          collapsible: true,
+          active: false
+      });
 
-        <dd>
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedByUsername)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedByUsername)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.CreateDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category.CreateDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdatedByUsername)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UpdatedByUsername)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.UpdateDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category.UpdateDate)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Category.Id }) |
-    @Html.ActionLink("Back to List", "Index") |
-    @Html.ActionLink("Delete", "Delete", "Category", new { id = Model.Category.Id }, null)
-</p>
+      $("#subcategoryProductsAccordion").accordion({
+          heightStyle: "content",
+          collapsible: true,
+          active: false
+      });
+  } );
+</script>
 
 <div class="row">
-
-
-
-</div>
-
-<div>
-    <h3>The Category @Model.Category.Name has the following Sub-Categories</h3>
-    @{
-        if (Model.Category.Children.Count > 0)
-        {
-            foreach (var category in Model.Category.Children)
-            {
-                <div>
-                    <h4>
-                        @Html.ActionLink(category.Name, "Details", "Category", new { Id = category.Id }, null)
-                    </h4>
-                    <p>Products attached to the Sub-Category</p>
-                    <ul>
-                        @{
-                            if (category.Products.Count() > 0)
-                            {
-                                foreach (var product in category.Products)
-                                {
-                                    <li>@Html.ActionLink(product.Name, "Details", "Product", new { Id = product.Id }, null)</li>
-                                }
-                            }
-                            else
-                            {
-                                <li>There are no Products in the @category.Name sub-category</li>
-                            }
-
-                        }
-                        
-                    </ul>
-                </div>
-            }
-        }
-        else
-        {
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        @* TODO: add category tree view explorer *@
+    </div>
+    <div class="col-lg-6 col-md-7 col-sm-6">
+        <div id="CategoryDetail">
+            <h2>@ViewBag.Title</h2>
             <div>
-                <label>There are no sub categories</label>
+                @{  if (Model.Parent != null)
+                    {
+                        <div>
+                            <h3>@Model.Category.Name is a sub-category of: @Model.Parent.Name</h3>
+                        </div>
+                    }
+                }
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Category.Name)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Category.Name)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Category.Description)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Category.Description)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreatedByUsername)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreatedByUsername)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Category.CreateDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Category.CreateDate)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.UpdatedByUsername)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.UpdatedByUsername)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Category.UpdateDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Category.UpdateDate)
+                    </dd>
+
+                </dl>
+                <p>
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Category.Id }) |
+                    @Html.ActionLink("Back to List", "Index") |
+                    @Html.ActionLink("Delete", "Delete", "Category", new { id = Model.Category.Id }, null)
+                    @{  if (Model.Parent != null)
+                        {
+                            <br />
+                            @Html.ActionLink("Back to " + Model.Parent.Name, "Details", "Category", new { id = Model.Parent.Id }, null)
+                        }
+                    }
+                </p>
             </div>
-        }
-    }
-</div>
+        </div>
 
-
-<div>
-    <h3>Products that are included in the @Model.Category.Name Category</h3>
-    @if (Model.Category.Products.Count > 0)
-    {
-        <ul>
-            @foreach(var product in Model.Category.Products)
-            {
-                <li>@Html.ActionLink(@product.Name, "Details", "Product", new { Id = @product.Id }, null)</li>
+        <div id="Sub-Categories">
+            <p>The Category <b>@Model.Category.Name</b> has the following Sub-Categories</p>
+            @{
+                if (Model.Category.Children.Count > 0)
+                {
+                    <div id="categoryAccordion" class="accordion">
+                        @foreach (var subcategory in Model.Category.Children)
+                        {
+                            <h3>@subcategory.Name</h3>
+                            <div>
+                                @Html.ActionLink("View " + subcategory.Name + " details", "Details", "Category", new { Id = subcategory.Id }, null)
+                                <br />
+                                <ul id="subcategoryProductsAccordion" style="list-style:none">
+                                    @{
+                                        if (subcategory.Products.Count() > 0)
+                                        {
+                                            foreach (var product in subcategory.Products)
+                                            {
+                                                <li>
+                                                    <h3>@product.Name</h3>
+                                                    <div>@Html.ActionLink(product.Name, "Details", "Product", new { Id = product.Id }, null)</div>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li>There are no Products in the @subcategory.Name sub-category</li>
+                                        }
+                                    }
+                                </ul>
+                                @Html.ActionLink("Create a new " + subcategory.Name + " product", "Create", "Product", new { categoryId = subcategory.Id }, null)
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <label>There are no sub categories</label>
+                    </div>
+                }
             }
-        </ul>
-    }
-    else
-    {
-        <ul>
-            <li>There are no Products in the @Model.Category.Name category.</li>
-        </ul>
-    }
-    @Html.ActionLink((string)ViewBag.CreateProductMessage, "Create", "Product", new { categoryId = Model.Category.Id }, null)
-</div>
+            @Html.ActionLink("create new " + Model.Category.Name + " sub-category", "CreateSubCategory", "Category", new { categoryId = Model.Category.Id }, null)
+        </div>
 
+        <div id="Products">
+            <h3>Products that are included in the @Model.Category.Name Category</h3>
+            <div>
+                @if (Model.Category.Products.Count > 0)
+                {
+                    <ul id="productAccordion">
+                        @foreach (var product in Model.Category.Products)
+                        {
+                            <li>
+                                <h4>@product.Name</h4>
+                                <div>
+                                    @Html.ActionLink(@product.Name, "Details", "Product", new { Id = @product.Id }, null)
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <ul>
+                        <li>There are no Products in the @Model.Category.Name category.</li>
+                    </ul>
+                }
+                @Html.ActionLink((string)ViewBag.CreateProductMessage, "Create", "Product", new { categoryId = Model.Category.Id }, null)
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-3 col-sm-2">
+        @* TODO Add some action links and thinks for quick admin tasks  *@
+    </div>
+</div>

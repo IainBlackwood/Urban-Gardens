@@ -12,7 +12,7 @@ namespace AcleUrbanGardens.Domain
         public virtual int Id { get; set; }
 
         // to enable sub-categories
-        public int? ParentId { get; set; }
+        public virtual int? ParentId { get; set; }
         //public virtual Category Parent { get; set; }
         public virtual ICollection<Category> Children { get; set; }
 
@@ -39,6 +39,8 @@ namespace AcleUrbanGardens.Domain
         [Display(Name = "Update Date")]
         public virtual DateTime? UpdateDate { get; set; }
 
+
+        public bool IsDeleted { get; set; }
     }
 }
 

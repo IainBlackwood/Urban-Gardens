@@ -1,26 +1,14 @@
-﻿using AcleUrbanGardens.Domain;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace AcleUrbanGardens.Web.Models
 {
-    public class CreateSubCategoryViewModel
+    public class EditCategoryViewModelOld
     {
-        public virtual int Id { get; set; }
-
-        // to enable sub-categories
         [Required]
-        //[HiddenInput(DisplayValue = false)]
-        public int? ParentId { get; set; }
-
-        //[HiddenInput(DisplayValue = false)]
-        public virtual Category Parent { get; set; }
-        //public virtual ICollection<Category> Children { get; set; }
-
-        //// a category contains many products
-        //public virtual ICollection<Product> Products { get; set; }
+        [HiddenInput(DisplayValue = false)]
+        public virtual int Id { get; set; }
 
         [Required]
         public virtual string Name { get; set; }
@@ -30,18 +18,23 @@ namespace AcleUrbanGardens.Web.Models
 
         [Required]
         [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Created By")]
         public virtual string CreatedBy { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
         [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Create Date")]
         public virtual DateTime CreateDate { get; set; }
 
         [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Updated By")]
         public virtual string UpdatedBy { get; set; }
 
         [DataType(DataType.DateTime)]
         [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Update Date")]
         public virtual DateTime? UpdateDate { get; set; }
+
     }
 }

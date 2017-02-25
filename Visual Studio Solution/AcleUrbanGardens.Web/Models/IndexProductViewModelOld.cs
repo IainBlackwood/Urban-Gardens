@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace AcleUrbanGardens.Web.Models
 {
-    public class IndexProductViewModel
+    public class IndexProductViewModelOld
     {
         [Required]
         [Display(Name = "Product Name")]
