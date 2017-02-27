@@ -39,6 +39,9 @@ namespace AcleUrbanGardens.Domain
         [Display(Name = "Update Date")]
         public virtual DateTime? UpdateDate { get; set; }
 
+        [Required]
+        [Display(Name = "Image")]
+        public virtual string ImagePath { get; set; }
 
         public bool IsDeleted { get; set; }
     }

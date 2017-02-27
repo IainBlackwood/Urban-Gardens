@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GridMvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grid.Mvc.3.0.0\lib\net40\GridMvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -307,6 +311,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Helpers\AcleUrbanGardenHelpers.cs" />
     <Compile Include="Models\CategoryViewModels.cs" />
     <Compile Include="Migrations\AcleUrbanGardensDbContext\Configuration.cs" />
     <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
@@ -337,6 +342,11 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Gridmvc.css" />
+    <Content Include="Content\Images\air-control.png" />
+    <Content Include="Content\Images\grow-kits.png" />
+    <Content Include="Content\Images\grow-lights.png" />
+    <Content Include="Content\Images\grow-systems.png" />
     <Content Include="Content\Images\logo.jpg" />
     <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_100.png" />
     <Content Include="Content\Images\Social\Facebook\FB-f-Logo__blue_1024.png" />
@@ -367,6 +377,7 @@
     <Content Include="Content\Images\Social\Google\btn_google_signin_light_pressed_web%402x.png" />
     <Content Include="Content\Images\Social\Twitter\Twitter_Logo_White_On_Blue.png" />
     <Content Include="Content\Images\Social\Twitter\Twitter_Social_Icon_Rounded_Square_Color.png" />
+    <Content Include="Content\Images\tools-accessories.png" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -422,11 +433,15 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Grid.mvc.readme" />
     <None Include="Properties\PublishProfiles\acle-urban-gardens-dev.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.1-vsdoc.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\gridmvc.js" />
+    <Content Include="Scripts\gridmvc.lang.ru.js" />
+    <Content Include="Scripts\gridmvc.min.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
@@ -514,6 +529,8 @@
     <Content Include="Web - Copy.Release.config">
       <DependentUpon>Web - Copy.config</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\_GridPager.cshtml" />
+    <Content Include="Views\Shared\_Grid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

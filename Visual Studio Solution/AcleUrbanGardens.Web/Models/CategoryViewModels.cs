@@ -7,6 +7,13 @@ using System.Web.Mvc;
 
 namespace AcleUrbanGardens.Web.Models
 {
+    public class IndexCategoryViewModel
+    {
+        public virtual IEnumerable<Category> Categories { get; set; }
+
+
+    }
+
     public class CreateCategoryViewModel
     {
         [Required]
