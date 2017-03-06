@@ -10,8 +10,8 @@ namespace AcleUrbanGardens.Web.Models
     public class IndexCategoryViewModel
     {
         public virtual IEnumerable<Category> Categories { get; set; }
-
-
+        public virtual int RowsPerPage { get; set; }
+        public Dictionary<string, string> RowOptions { get; set; }
     }
 
     public class CreateCategoryViewModel
@@ -127,6 +127,10 @@ namespace AcleUrbanGardens.Web.Models
         [Required]
         [Display(Name = "Updated By")]
         public virtual string UpdatedByUsername { get; set; }
+
+        public virtual int SubCategoryRowsPerCategory { get; set; }
+        public virtual int ProductRowsPerCategory { get; set; }
+        public Dictionary<string, string> RowOptions { get; set; }
     }
 
     public class EditCategoryViewModel

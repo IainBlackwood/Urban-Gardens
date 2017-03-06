@@ -4,12 +4,10 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AcleUrbanGardens.Domain;
 using AcleUrbanGardens.Web.Infrastructure;
 using AcleUrbanGardens.Web.Models;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 
 namespace AcleUrbanGardens.Web.Controllers
@@ -27,9 +25,22 @@ namespace AcleUrbanGardens.Web.Controllers
         }
 
         // GET: Category
-        public ActionResult Index()
+        public ActionResult Index(int? numRows)
         {
-            return View(_db.Categories.ToList().Where(c => c.ParentId == null && c.IsDeleted == false).OrderBy(c => c.Name));
+            if (numRows == null)
+            {
+                // set default of X per page (we can choose something suitable 0 gets all) 
+                numRows = 0;
+            }
+
+            var viewModel = new IndexCategoryViewModel();
+            //viewModel.NumRowsToDisplay = numberOfRowsPerPageOptions;
+            viewModel.Categories = _db.Categories.ToList().Where(c => c.ParentId == null && c.IsDeleted == false).OrderBy(c => c.Name);
+            viewModel.RowsPerPage = Convert.ToInt32(numRows);
+
+
+            viewModel.RowOptions = Models.Constants.ROW_OPTIONS;
+            return View(viewModel);
         }
 
         // GET: Category/Details/5

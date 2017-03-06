@@ -8,7 +8,7 @@ namespace AcleUrbanGardens.Web.Helpers
 {
     public static class AcleUrbanGardenHelpers
     {
-        public static MvcHtmlString ActionImage(this HtmlHelper html, string action, object routeValues, string imagePath, string alt, string width, string height)
+        public static MvcHtmlString ActionImage(this HtmlHelper html, string action, string controller, object routeValues, string imagePath, string alt, string width, string height)
         {
             var url = new UrlHelper(html.ViewContext.RequestContext);
 
@@ -22,7 +22,7 @@ namespace AcleUrbanGardens.Web.Helpers
 
             // build the <a> tag
             var anchorBuilder = new TagBuilder("a");
-            anchorBuilder.MergeAttribute("href", url.Action(action, routeValues));
+            anchorBuilder.MergeAttribute("href", url.Action(action, controller, routeValues));
             anchorBuilder.InnerHtml = imgHtml; // include the <img> tag inside
             string anchorHtml = anchorBuilder.ToString(TagRenderMode.Normal);
 

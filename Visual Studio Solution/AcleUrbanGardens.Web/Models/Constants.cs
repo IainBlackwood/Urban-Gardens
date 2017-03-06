@@ -8,5 +8,16 @@ namespace AcleUrbanGardens.Web.Models
     public static class Constants
     {
         public static readonly string CATEGORY_UNASSIGNED_PRODUCTS = "Unassigned-Products";
+
+        public static readonly Dictionary<string, string> ROW_OPTIONS = new Dictionary<string, string>()
+            {
+                { "All", "0" },
+                { "100", "100" },
+                { "50", "50" },
+                { "30", "30" },
+                { "20", "20" },
+                { "10", "10" },
+                { "5", "5" }
+            };
     }
 }
