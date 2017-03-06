@@ -9,7 +9,8 @@ namespace AcleUrbanGardens.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-3.1.1*"));
+                        "~/Scripts/jquery-3.1.1*",
+                        "~/Scripts/jquery-3.1.1.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
                         "~/Scripts/jquery-ui-1.12.2*"));
@@ -28,9 +29,9 @@ namespace AcleUrbanGardens.Web
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/Gridmvc.css",
+                      "~/Content/bootstrap.css",
                       "~/Content/bootstrap.min.css"));
         }
     }

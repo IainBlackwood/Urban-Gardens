@@ -17,7 +17,7 @@ namespace AcleUrbanGardens.Domain
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdateDate { get; set; }
         public virtual string UpdatedBy { get; set; }
-        public virtual string ProductImage { get; set; }
+        public virtual string ImagePath { get; set; }
 
         public virtual int? CategoryId { get; set; }
 

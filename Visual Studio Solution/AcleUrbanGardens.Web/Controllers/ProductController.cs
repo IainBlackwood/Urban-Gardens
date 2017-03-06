@@ -120,7 +120,7 @@ namespace AcleUrbanGardens.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "Name,LongDescription,ShortDescription,CreatedBy,CreateDate,ProductImage,CategoryId,CreatedFromCategoryDetail")] CreateProductViewModel viewModel)
+        public ActionResult Create([Bind(Include = "Name,LongDescription,ShortDescription,CreatedBy,CreateDate,ImagePath,CategoryId,CreatedFromCategoryDetail")] CreateProductViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -132,7 +132,7 @@ namespace AcleUrbanGardens.Web.Controllers
                 product.Name = viewModel.Name;
                 product.LongDescription = viewModel.LongDescription;
                 product.ShortDescription = viewModel.ShortDescription;
-                product.ProductImage = viewModel.ProductImage;
+                product.ImagePath = viewModel.ImagePath;
                 product.CreateDate = DateTime.UtcNow;
                 product.CreatedBy = "Admin";
                 product.CategoryId = category.Id;
@@ -206,7 +206,7 @@ namespace AcleUrbanGardens.Web.Controllers
             viewModel.CreatedBy = product.CreatedBy;
             viewModel.UpdateDate = product.UpdateDate;
             viewModel.UpdatedBy = product.UpdatedBy;
-            viewModel.ProductImage = product.ProductImage;
+            viewModel.ImagePath = product.ImagePath;
             viewModel.CategoryId = product.CategoryId;
             viewModel.FromCategoryDetail = product.FromCategoryDetail;
             // create select list items for the drop down list categories
@@ -218,7 +218,7 @@ namespace AcleUrbanGardens.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,LongDescription,ShortDescription,CreatedBy,CreateDate,ProductImage,CategoryId")] EditProductViewModel viewModel)
+        public ActionResult Edit([Bind(Include = "Id,Name,LongDescription,ShortDescription,CreatedBy,CreateDate,ImagePath,CategoryId")] EditProductViewModel viewModel)
         {
             // fist we need to see if the category id is null
             if (viewModel.CategoryId == null)

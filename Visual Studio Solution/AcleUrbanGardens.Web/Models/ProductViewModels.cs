@@ -67,7 +67,7 @@ namespace AcleUrbanGardens.Web.Models
 
         [Required]
         [Display(Name = "Product Image")]
-        public virtual string ProductImage { get; set; }
+        public virtual string ImagePath { get; set; }
 
         [HiddenInput(DisplayValue = false)]
         public virtual string CategoryName { get; set; }
@@ -123,7 +123,7 @@ namespace AcleUrbanGardens.Web.Models
 
         [Required]
         [Display(Name = "Product Image")]
-        public virtual string ProductImage { get; set; }
+        public virtual string ImagePath { get; set; }
 
         [HiddenInput(DisplayValue = false)]
         public virtual string CategoryName { get; set; }
