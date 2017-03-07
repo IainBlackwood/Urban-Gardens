@@ -19,5 +19,12 @@ namespace AcleUrbanGardens.Web.Models
                 { "10", "10" },
                 { "5", "5" }
             };
+
+        public static readonly Dictionary<string, string> SMALL_GRID_ROW_OPTIONS = new Dictionary<string, string>()
+            {
+                { "10", "10" },
+                { "5", "5" },
+                { "1", "1" }
+            };
     }
 }

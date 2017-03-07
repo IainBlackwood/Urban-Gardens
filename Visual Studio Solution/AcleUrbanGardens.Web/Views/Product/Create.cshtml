@@ -15,7 +15,7 @@
             if (Model.CategoryId != null)
             {
                 <p>
-                    @Html.ActionLink("Back to category detail", "Details", "Category", new { Id = Model.CategoryId }, null)
+                    @Html.ActionLink("Back to category detail", "Details", "Category", new { Id = Model.CategoryId }, new { @class = "btn btn-primary btn-large" })
                 </p>
             }
         }

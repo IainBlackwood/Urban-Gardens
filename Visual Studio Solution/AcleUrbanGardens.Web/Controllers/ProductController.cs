@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Collections.Generic;
 using AcleUrbanGardens.Web.Infrastructure;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity;
 
 namespace AcleUrbanGardens.Web.Controllers
 {
@@ -58,8 +59,8 @@ namespace AcleUrbanGardens.Web.Controllers
             // create model 
             var viewModel = new CreateProductViewModel();
             
-            // TODO: get the user role 
-            viewModel.CreatedBy = "Admin";
+            // get the user role 
+            viewModel.CreatedBy = User.Identity.GetUserId();
             viewModel.CreateDate = DateTime.UtcNow;
             // create select list items for the drop down list categories
             viewModel.Categories = GetCategorySelectListItems(categoryId);
@@ -71,7 +72,7 @@ namespace AcleUrbanGardens.Web.Controllers
                 viewModel.CreatedFromCategoryDetail = true;
             else
                 // get the default category (Unassigned-Products)
-                categoryId = _db.Categories.Single(c => c.Name == Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id;
+                categoryId = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id;
 
             // set the selected category name
             viewModel.CategoryName = _db.Categories.Find(categoryId).Name;
@@ -224,7 +225,7 @@ namespace AcleUrbanGardens.Web.Controllers
             if (viewModel.CategoryId == null)
             {
                 // get the unassigned value as default.
-                viewModel.CategoryId = Convert.ToInt32(viewModel.Categories.Single(c => c.Text == Constants.CATEGORY_UNASSIGNED_PRODUCTS).Value);
+                viewModel.CategoryId = Convert.ToInt32(viewModel.Categories.Single(c => c.Text == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Value);
             }
             viewModel.Categories = GetCategorySelectListItems(viewModel.CategoryId);
             // get the selected category
@@ -287,7 +288,7 @@ namespace AcleUrbanGardens.Web.Controllers
 
                 _db.SaveChanges();
 
-                // todo add code to delete the products
+                // return to the index page
                 return RedirectToAction("Index");
             }
 
