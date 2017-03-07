@@ -8,15 +8,6 @@
     ViewBag.CreateProductMessage = "Create a new " + Model.Category.Name + " product";
 }
 
-<script>
-  $( function() {
-    $( "#accordion" ).accordion({
-      collapsible: true,
-      active: false
-    });
-  });
-</script>
-
 @helper RenderProducts(List<Product> products)
 {
     if(products.Count() > 0)
@@ -45,184 +36,330 @@
 }
 
 <div class="row">
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    <div class="col-lg-2 col-md-2 col-sm-2" style="padding-right: 100px">
         @* TODO: add category tree view explorer *@
+        @*<div class="container">
+            <br />
+            <div id="CategoryDetail" class="container" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75)">
+                <h3>Tree View here!</h3>
+                <br />
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+            </div>
+        </div>*@
     </div>
-    <div class="col-lg-6 col-md-7 col-sm-6">
-        <div id="CategoryDetail">
-            <h2>@ViewBag.Title</h2>
-            <div>
-                @{  if (Model.Parent != null)
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        <div class="container">
+            <br />
+            <div id="categorydetail" class="jumbotron container-fluid" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);">
+                <h1>@ViewBag.Title</h1>
+                @{
+                    if (Model.Parent != null)
                     {
-                        <div>
-                            <h3>@Model.Category.Name is a sub-category of: @Model.Parent.Name</h3>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <h2>@Model.Category.Name is a sub-category of: @Model.Parent.Name</h2>
+                            </div>
                         </div>
                     }
                 }
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Category.Name)
-                    </dt>
+                <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-7">
+                        <div class="row">
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Category.Name)
+                                </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Category.Name)
-                    </dd>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Category.Name)
+                                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Category.Description)
-                    </dt>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Category.Description)
+                                </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Category.Description)
-                    </dd>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Category.Description)
+                                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.CreatedByUsername)
-                    </dt>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.CreatedByUsername)
+                                </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.CreatedByUsername)
-                    </dd>
+                                <dd>
+                                    @Html.DisplayFor(model => model.CreatedByUsername)
+                                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Category.CreateDate)
-                    </dt>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Category.CreateDate)
+                                </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Category.CreateDate)
-                    </dd>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Category.CreateDate)
+                                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.UpdatedByUsername)
-                    </dt>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.UpdatedByUsername)
+                                </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.UpdatedByUsername)
-                    </dd>
+                                <dd>
+                                    @Html.DisplayFor(model => model.UpdatedByUsername)
+                                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Category.UpdateDate)
-                    </dt>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Category.UpdateDate)
+                                </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Category.UpdateDate)
-                    </dd>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Category.UpdateDate)
+                                </dd>
 
-                </dl>
-                <p>
-                    @Html.ActionLink("Edit", "Edit", "Category", new { id = Model.Category.Id }, new { @class = "btn btn-primary" })
-                    @Html.ActionLink("Back to List", "Index", "Category", new { @class = "btn btn-primary" })
-                    @Html.ActionLink("Delete", "Delete", "Category", new { id = Model.Category.Id }, new { @class = "btn btn-primary" })
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Category.IsDeleted)
+                                </dt>
+
+                                <dd>
+                                    @Html.EditorFor(model => model.Category.IsDeleted, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                </dd>
+                            </dl>
+                        </div>  
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                @Html.ActionImage("Details", "Category", new { Model.Category.Id }, "~/Content/Images/" + Model.Category.ImagePath, Model.Category.ImagePath, "300px", "60px")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 5px">
+                        @Html.ActionLink("Edit", "Edit", "Category", new { id = Model.Category.Id }, new { @class = "btn btn-primary" })
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 5px">
+                        @Html.ActionLink("Back to List", "Index", "Category", new { @class = "btn btn-primary" })
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 5px">
+                        @Html.ActionLink("Delete", "Delete", "Category", new { id = Model.Category.Id }, new { @class = "btn btn-primary" })
+                    </div>
                     @{  if (Model.Parent != null)
                         {
-                            @Html.ActionLink("Back to " + Model.Parent.Name, "Details", "Category", new { id = Model.Parent.Id }, new { @class = "btn btn-primary" })
+                            <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 5px">
+                                @Html.ActionLink("Back to " + Model.Parent.Name, "Details", "Category", new { id = Model.Parent.Id }, new { @class = "btn btn-primary" })
+                            </div>
                         }
                     }
-                </p>
+                </div>
+
             </div>
-        </div>
-        <hr />
-        <div id="subcategories">
-            <p>The Category <b>@Model.Category.Name</b> has the following Sub-Categories</p>
-            <div>
-                @Html.Grid(Model.Category.Children).Columns(columns =>
-                {
-                    /* Adding "Name" column: */
-                    columns.Add(sc => sc.Name)
-                            .Encoded(false)
-                            .Sanitized(false)
-                            .Titled("Name")
-                            .RenderValueAs(sc =>
-                            @<b>
-                                @Html.ActionLink(sc.Name, "Details", "Category", new { sc.Id }, new { @class = "btn btn-primary" })
-                            </b>);
+            <div id="subcategories" class="panel-group">
+                <div class="panel panel-primary" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);">
+                    <div class="panel-heading">
+                        <!--If there are sub categories-->
+                        @{  if (Model.Category.Children.Count > 0)
+                            {
+                                <p>The following sub-categories are linked to the category <b>@Model.Category.Name</b></p>
+                            }
+                            else
+                            {
+                                <p>The Category <b>@Model.Category.Name</b> has no Sub-Categories</p>
+                            }
+                        }
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            @using (Html.BeginForm("Index", "Category", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                        @{
+                                            if (Model.SubCategoryRowsPerCategory == 0)
+                                            {
+                                                <b>Display All Records</b>
+                                            }
+                                            else
+                                            {
+                                                <b>Display @Model.SubCategoryRowsPerCategory Records</b>
+                                            }
+                                        }
+                                        <span class="caret"></span>
+                                    </button>
 
-                   /* Adding "Short Description" column: */
-                   columns.Add(sc => sc.Description)
-                           .Filterable(true)
-                           .Titled("Description");
+                                    <ul class="dropdown-menu">
 
-                   /* Adding "image" column: */
-                   columns.Add(sc => sc.ImagePath)
-                       .Encoded(false)
-                       .Sanitized(false)
-                       .Titled("Image")
-                       .RenderValueAs(sc =>
-                            @Html.ActionImage("Details", "Category", new { sc.Id }, "~/Content/Images/" + sc.ImagePath, "Details", "200px", "40px")
-                       );
-
-                   /* Adding "IsDeleted" column: */
-                   columns.Add(c => c.IsDeleted)
-                       .Titled("Is Deleted")
-                       .Encoded(false)
-                       .Sanitized(false)
-                       .SetWidth(40)
-                       .RenderValueAs(o => Html.CheckBox("checked", false));
-
-                   /* Adding not mapped column, that renders body, using inline Razor html helper */
-                   columns.Add()
-                           .Encoded(false)
-                           .Sanitized(false)
-                           .RenderValueAs(c =>
+                                        @{
+                                            foreach (var option in Model.RowOptions)
+                                            {
+                                                <li>@Html.ActionLink("Display " + option.Key, null, null, new { Id = Model.Category.Id, subCatNumRows = option.Value, prodNumRows = Model.ProductRowsPerCategory }, new { @class = "btn btn-primary btn-sm" })</li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                        <div>
+                            @Html.Grid(Model.Category.Children).Named("subcats").Columns(columns =>
+                            {
+                                /* Adding action link to category detail column: */
+                                columns.Add()
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .RenderValueAs(c =>
                                         @<b>
-                                            @Html.ActionLink("Create " + c.Name + " Sub-Category", "CreateSubCategory", "Category", new { categoryId = c.Id }, new { @class = "btn btn-primary" })
+                                            @Html.ActionLink("View " + c.Name, "Details", "Category", new { c.Id }, new { @class = "btn btn-primary btn-sm" })
                                         </b>);
 
-                }).SetRowCssClasses(item => item.IsDeleted ? "warning" : string.Empty).WithPaging(0).Sortable().Filterable().WithMultipleFilters().Selectable(false)
+                                /* Adding "Name" column: */
+                                columns.Add(c => c.Name)
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .Filterable(true)
+                                        .Titled("Name");
+
+                                /* Adding "Short Description" column: */
+                                columns.Add(sc => sc.Description)
+                                        .Filterable(true)
+                                        .Titled("Description");
+
+                                /* Adding "image" column: */
+                                columns.Add(sc => sc.ImagePath)
+                                    .Encoded(false)
+                                    .Sanitized(false)
+                                    .Titled("Image")
+                                    .RenderValueAs(sc =>
+                                         @Html.ActionImage("Details", "Category", new { sc.Id }, "~/Content/Images/" + sc.ImagePath, "Details", "200px", "40px")
+                                    );
+
+                                /* Adding "IsDeleted" column: */
+                                columns.Add(c => c.IsDeleted)
+                                    .Titled("Is Deleted")
+                                    .Encoded(false)
+                                    .Sanitized(false)
+                                    .SetWidth(40)
+                                    .RenderValueAs(o => Html.EditorFor(c => o.IsDeleted, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } }));
+
+                                /* Adding not mapped column, that renders body, using inline Razor html helper */
+                                columns.Add()
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .RenderValueAs(c =>
+                                        @<b>
+                                            @Html.ActionLink("Create Sub-Category", "CreateSubCategory", "Category", new { categoryId = c.Id }, new { @class = "btn btn-primary btn-sm" })
+                                        </b>);
+
+                            }).SetRowCssClasses(item => item.IsDeleted ? "warning" : string.Empty).WithPaging(Model.SubCategoryRowsPerCategory).Sortable().Filterable().WithMultipleFilters().Selectable(false)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="products"class="panel-group">
+                <div class="panel panel-primary" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);">
+                    <div class="panel-heading">
+                        <!--If there are products-->
+                        @{  if (Model.Category.Children.Count > 0)
+                            {
+                                <p>The following products are linked to the category <b>@Model.Category.Name</b></p>
+                            }
+                            else
+                            {
+                                <p>The Category <b>@Model.Category.Name</b> contains no products</p>
+                            }
+                        }
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            @using (Html.BeginForm("Index", "Category", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                        @{
+                                            if (Model.ProductRowsPerCategory == 0)
+                                            {
+                                                <b>Display All Records</b>
+                                            }
+                                            else
+                                            {
+                                                <b>Display @Model.ProductRowsPerCategory Records</b>
+                                            }
+                                        }
+                                        <span class="caret"></span>
+                                    </button>
+
+                                    <ul class="dropdown-menu">
+
+                                        @{
+                                            foreach (var option in Model.RowOptions)
+                                            {
+                                                <li>@Html.ActionLink("Display " + option.Key, null, null, new { Id = Model.Category.Id, subCatNumRows = Model.SubCategoryRowsPerCategory, prodNumRows = option.Value }, new { @class = "btn btn-primary btn-sm" })</li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                        <div>
+                            @Html.Grid(Model.Category.Products).Named("prods").Columns(columns =>
+                            {
+                                /* Adding action link to category detail column: */
+                                columns.Add()
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .RenderValueAs(p =>
+                                        @<b>
+                                            @Html.ActionLink("View " + p.Name, "Details", "Product", new { p.Id }, new { @class = "btn btn-primary btn-sm" })
+                                        </b>);
+
+                                /* Adding "Name" column: */
+                                columns.Add(p => p.Name)
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .Filterable(true)
+                                        .Titled("Name");
+
+                                /* Adding "Short Description" column: */
+                                columns.Add(p => p.ShortDescription)
+                                        .Filterable(true)
+                                        .Titled("Short Description");
+
+                                /* Adding "Short Description" column: */
+                                columns.Add(p => p.LongDescription)
+                                        .Filterable(true)
+                                        .Titled("Long Description");
+
+                                /* Adding "image" column: */
+                                columns.Add(p => p.ImagePath)
+                                    .Encoded(false)
+                                    .Sanitized(false)
+                                    .Titled("Image")
+                                    .RenderValueAs(p =>
+                                         @Html.ActionImage("Details", "Product", new { p.Id }, "~/Content/Images/" + p.ImagePath, "Details", "200px", "40px")
+                                    );
+
+                                /* Adding "IsDeleted" column: */
+                                columns.Add(p => p.IsDeleted)
+                                    .Titled("Is Deleted")
+                                    .Encoded(false)
+                                    .Sanitized(false)
+                                    .SetWidth(40)
+                                    .RenderValueAs(o => Html.EditorFor(c => o.IsDeleted, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } }));
+
+                                /* Adding not mapped column, that renders body, using inline Razor html helper */
+                                columns.Add()
+                                .Encoded(false)
+                                .Sanitized(false)
+                                .RenderValueAs(p =>
+                                @<b>
+                                    @Html.ActionLink("Create " + Model.Category.Name + " Product", "Create", "Product", new { categoryId = Model.Category.Id }, new { @class = "btn btn-primary btn-sm" })
+                                </b>);
+
+                            }).SetRowCssClasses(item => item.IsDeleted ? "warning" : string.Empty).WithPaging(Model.ProductRowsPerCategory).Sortable().Filterable().WithMultipleFilters().Selectable(false)
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <hr />
-        <div id="Products">
-            <p>Products that are included in the <b>@Model.Category.Name</b> Category</p>
-            <div>
-                @Html.Grid(Model.Category.Products).Columns(columns =>
-                {
-                    /* Adding "Name" column: */
-                    columns.Add(p => p.Name)
-                            .Encoded(false)
-                            .Sanitized(false)
-                            .Titled("Name")
-                            .RenderValueAs(p =>
-                            @<b>
-                                @Html.ActionLink(p.Name, "Details", "Product", new { p.Id }, new { @class = "btn btn-primary" })
-                            </b>);
-
-                /* Adding "Short Description" column: */
-                columns.Add(p => p.ShortDescription)
-                        .Filterable(true)
-                        .Titled("Description");
-
-                /* Adding "image" column: */
-                columns.Add(p => p.ImagePath)
-                    .Encoded(false)
-                    .Sanitized(false)
-                    .Titled("Image")
-                    .RenderValueAs(p =>
-                         @Html.ActionImage("Details", "Product", new { p.Id }, "~/Content/Images/" + p.ImagePath, "Details", "200px", "40px")
-                    );
-
-                /* Adding "IsDeleted" column: */
-                columns.Add(c => c.IsDeleted)
-                    .Titled("Is Deleted")
-                    .Encoded(false)
-                    .Sanitized(false)
-                    .SetWidth(40)
-                    .RenderValueAs(o => Html.CheckBox("checked", false));
-
-                /* Adding not mapped column, that renders body, using inline Razor html helper */
-                columns.Add()
-                        .Encoded(false)
-                        .Sanitized(false)
-                        .RenderValueAs(c =>
-                            @<b>
-                                @Html.ActionLink("Create " + c.Name + " Sub-Category", "CreateSubCategory", "Category", new { categoryId = c.Id }, new { @class = "btn btn-primary" })
-                            </b>);
-
-                }).SetRowCssClasses(item => item.IsDeleted ? "warning" : string.Empty).WithPaging(5).Sortable().Filterable().WithMultipleFilters().Selectable(false)
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-2 col-md-3 col-sm-2">
-        @* TODO Add some action links and thinks for quick admin tasks  *@
     </div>
 </div>

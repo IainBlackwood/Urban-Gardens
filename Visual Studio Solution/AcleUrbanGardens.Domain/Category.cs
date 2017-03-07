@@ -43,6 +43,8 @@ namespace AcleUrbanGardens.Domain
         [Display(Name = "Image")]
         public virtual string ImagePath { get; set; }
 
+        [Required]
+        [Display(Name = "Deleted")]
         public bool IsDeleted { get; set; }
     }
 }

@@ -35,7 +35,7 @@ namespace AcleUrbanGardens.Web.Controllers
 
             var viewModel = new IndexCategoryViewModel();
             //viewModel.NumRowsToDisplay = numberOfRowsPerPageOptions;
-            viewModel.Categories = _db.Categories.ToList().Where(c => c.ParentId == null && c.IsDeleted == false).OrderBy(c => c.Name);
+            viewModel.Categories = _db.Categories.ToList().Where(c => c.ParentId == null).OrderBy(c => c.Name);
             viewModel.RowsPerPage = Convert.ToInt32(numRows);
 
 
@@ -44,7 +44,7 @@ namespace AcleUrbanGardens.Web.Controllers
         }
 
         // GET: Category/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? subCatNumRows, int? prodNumRows)
         {
             if (id == null)
             {
@@ -88,11 +88,30 @@ namespace AcleUrbanGardens.Web.Controllers
             else
                 viewModel.UpdatedByUsername = string.Empty;
 
+            // ensure we have a value
+            if (subCatNumRows == null)
+            {
+                // set default of X per page (we can choose something suitable 0 gets all) 
+                subCatNumRows = 5;
+            }
+
+            // ensure we have a value
+            if (prodNumRows == null)
+            {
+                // set default of X per page (we can choose something suitable 0 gets all) 
+                prodNumRows = 5;
+            }
+
+            viewModel.SubCategoryRowsPerCategory = Convert.ToInt32(subCatNumRows);
+            viewModel.ProductRowsPerCategory = Convert.ToInt32(prodNumRows);
+            viewModel.RowOptions = Models.Constants.SMALL_GRID_ROW_OPTIONS;
+
             return View(viewModel);
         }
 
         private ICollection<Category> GetChildren(ICollection<Category> children, int? id)
         {
+            //TODO: Adjust so that we dont get the childrens products anymore
             foreach (var subCategory in children)
             {
                 subCategory.Products = _db.Products.Where(p => p.CategoryId == subCategory.Id).ToList();
