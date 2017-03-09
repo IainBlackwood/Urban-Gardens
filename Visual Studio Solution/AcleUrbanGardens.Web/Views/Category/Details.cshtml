@@ -119,7 +119,7 @@
                                 </dt>
 
                                 <dd>
-                                    @Html.EditorFor(model => model.Category.IsDeleted, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                    @Html.EditorFor(model => model.Category.IsDeleted, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", align = "left" } })
                                 </dd>
                             </dl>
                         </div>  
@@ -132,26 +132,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 5px">
-                        @Html.ActionLink("Edit", "Edit", "Category", new { id = Model.Category.Id }, new { @class = "btn btn-primary" })
+                <div class="row"> 
+                    <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 5px;">
+                        @Html.ActionLink("Edit", "Edit", "Category", new { id = Model.Category.Id }, new { @class = "btn btn-primary", title = "Edit " + Model.Category.Name })
+                        @Html.ActionLink("Delete", "Delete", "Category", new { id = Model.Category.Id }, new { @class = "btn btn-primary", title = "Delete " + Model.Category.Name })
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 5px">
-                        @Html.ActionLink("Back to List", "Index", "Category", new { @class = "btn btn-primary" })
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 5px">
-                        @Html.ActionLink("Delete", "Delete", "Category", new { id = Model.Category.Id }, new { @class = "btn btn-primary" })
-                    </div>
-                    @{  if (Model.Parent != null)
-                        {
-                            <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 5px">
-                                @Html.ActionLink("Back to " + Model.Parent.Name, "Details", "Category", new { id = Model.Parent.Id }, new { @class = "btn btn-primary" })
-                            </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 5px; text-align: right">
+                        @Html.ActionLink("Back to List", "Index", "Category", new { @class = "btn btn-primary", title = "Return to Catgory Maintenance" })
+                        @{  if (Model.Parent != null)
+                            {
+                                @Html.ActionLink("Back to " + Model.Parent.Name, "Details", "Category", new { id = Model.Parent.Id }, new { @class = "btn btn-primary", title = "Return to Catgory " + Model.Parent.Name })
+                            }
                         }
-                    }
+                    </div>
                 </div>
-
             </div>
+
             <div id="subcategories" class="panel-group">
                 <div class="panel panel-primary" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);">
                     <div class="panel-heading">
@@ -168,46 +164,71 @@
                     </div>
                     <div class="panel-body">
                         <div>
-                            @using (Html.BeginForm("Index", "Category", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-                                <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                        @{
-                                            if (Model.SubCategoryRowsPerCategory == 0)
-                                            {
-                                                <b>Display All Records</b>
-                                            }
-                                            else
-                                            {
-                                                <b>Display @Model.SubCategoryRowsPerCategory Records</b>
-                                            }
-                                        }
-                                        <span class="caret"></span>
-                                    </button>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    @using (Html.BeginForm("Index", "Category", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                                @{
+                                                    if (Model.SubCategoryRowsPerCategory == 0)
+                                                    {
+                                                        <b>Display All Records</b>
+                                                    }
+                                                    else
+                                                    {
+                                                        <b>Display @Model.SubCategoryRowsPerCategory Records</b>
+                                                    }
+                                                }
+                                                <span class="caret"></span>
+                                            </button>
 
-                                    <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu">
 
-                                        @{
-                                            foreach (var option in Model.RowOptions)
-                                            {
-                                                <li>@Html.ActionLink("Display " + option.Key, null, null, new { Id = Model.Category.Id, subCatNumRows = option.Value, prodNumRows = Model.ProductRowsPerCategory }, new { @class = "btn btn-primary btn-sm" })</li>
-                                            }
-                                        }
-                                    </ul>
+                                                @{
+                                                    foreach (var option in Model.RowOptions)
+                                                    {
+                                                        <li>@Html.ActionLink("Display " + option.Key, null, null, new { Id = Model.Category.Id, subCatNumRows = option.Value, prodNumRows = Model.ProductRowsPerCategory }, new { @class = "btn btn-primary btn-sm" })</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
                                 </div>
-                            }
+                                <div class="col-lg-6 col-md-6 col-sm-6" style="text-align: right">
+                                    @Html.ActionLink("Create " + Model.Category.Name + " Sub-Category", "CreateSubCategory", "Category", new { categoryId = Model.Category.Id }, new { @class = "btn btn-primary btn-sm", title = "Create " + Model.Category.Name + " Sub-Category" })
+                                </div>
+                            </div>
                         </div>
                         <div>
                             @Html.Grid(Model.Category.Children).Named("subcats").Columns(columns =>
                             {
-                                /* Adding action link to category detail column: */
+                                /* Adding action link to view category detail column: */
                                 columns.Add()
                                         .Encoded(false)
                                         .Sanitized(false)
                                         .RenderValueAs(c =>
                                         @<b>
-                                            @Html.ActionLink("View " + c.Name, "Details", "Category", new { c.Id }, new { @class = "btn btn-primary btn-sm" })
+                                            @Html.ActionLink("View", "Details", "Category", new { c.Id }, new { @class = "btn btn-primary btn-sm", title = "View " + c.Name })
+                                        </b>);
+
+                                /* Adding action link to edit category column: */
+                                columns.Add()
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .RenderValueAs(c =>
+                                        @<b>
+                                            @Html.ActionLink("Edit", "Edit", "Category", new { c.Id }, new { @class = "btn btn-primary btn-sm", title = "Edit " + c.Name })
+                                        </b>);
+
+                                /* Adding action link to delete category column: */
+                                columns.Add()
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .RenderValueAs(c =>
+                                        @<b>
+                                            @Html.ActionLink("Delete", "Delete", "Category", new { c.Id }, new { @class = "btn btn-primary btn-sm", title = "Delete " + c.Name })
                                         </b>);
 
                                 /* Adding "Name" column: */
@@ -245,7 +266,7 @@
                                         .Sanitized(false)
                                         .RenderValueAs(c =>
                                         @<b>
-                                            @Html.ActionLink("Create Sub-Category", "CreateSubCategory", "Category", new { categoryId = c.Id }, new { @class = "btn btn-primary btn-sm" })
+                                            @Html.ActionLink("Create Sub-Category", "CreateSubCategory", "Category", new { categoryId = c.Id }, new { @class = "btn btn-primary btn-sm", title = "Create " + c.Name + " Sub-Category" })
                                         </b>);
 
                             }).SetRowCssClasses(item => item.IsDeleted ? "warning" : string.Empty).WithPaging(Model.SubCategoryRowsPerCategory).Sortable().Filterable().WithMultipleFilters().Selectable(false)
@@ -270,35 +291,40 @@
                     </div>
                     <div class="panel-body">
                         <div>
-                            @using (Html.BeginForm("Index", "Category", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-                                <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                        @{
-                                            if (Model.ProductRowsPerCategory == 0)
-                                            {
-                                                <b>Display All Records</b>
-                                            }
-                                            else
-                                            {
-                                                <b>Display @Model.ProductRowsPerCategory Records</b>
-                                            }
-                                        }
-                                        <span class="caret"></span>
-                                    </button>
-
-                                    <ul class="dropdown-menu">
-
-                                        @{
-                                            foreach (var option in Model.RowOptions)
-                                            {
-                                                <li>@Html.ActionLink("Display " + option.Key, null, null, new { Id = Model.Category.Id, subCatNumRows = Model.SubCategoryRowsPerCategory, prodNumRows = option.Value }, new { @class = "btn btn-primary btn-sm" })</li>
-                                            }
-                                        }
-                                    </ul>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    @using (Html.BeginForm("Index", "Category", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                                @{
+                                                    if (Model.ProductRowsPerCategory == 0)
+                                                    {
+                                                        <b>Display All Records</b>
+                                                    }
+                                                    else
+                                                    {
+                                                        <b>Display @Model.ProductRowsPerCategory Records</b>
+                                                    }
+                                                }
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                @{
+                                                    foreach (var option in Model.RowOptions)
+                                                    {
+                                                        <li>@Html.ActionLink("Display " + option.Key, null, null, new { Id = Model.Category.Id, subCatNumRows = Model.SubCategoryRowsPerCategory, prodNumRows = option.Value }, new { @class = "btn btn-primary btn-sm" })</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
                                 </div>
-                            }
+                                <div class="col-lg-6 col-md-6 col-sm-6" style="text-align: right">
+                                    @Html.ActionLink("Create " + Model.Category.Name + " Product", "Create", "Product", new { categoryId = Model.Category.Id }, new { @class = "btn btn-primary btn-sm", title = "Create " + Model.Category.Name + " Product" })
+                                </div>
+                            </div>
                         </div>
                         <div>
                             @Html.Grid(Model.Category.Products).Named("prods").Columns(columns =>
@@ -309,7 +335,25 @@
                                         .Sanitized(false)
                                         .RenderValueAs(p =>
                                         @<b>
-                                            @Html.ActionLink("View " + p.Name, "Details", "Product", new { p.Id }, new { @class = "btn btn-primary btn-sm" })
+                                            @Html.ActionLink("View " + p.Name, "Details", "Product", new { p.Id }, new { @class = "btn btn-primary btn-sm", title = "View " + p.Name })
+                                        </b>);
+
+                                /* Adding action link to category detail column: */
+                                columns.Add()
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .RenderValueAs(p =>
+                                        @<b>
+                                            @Html.ActionLink("Edit " + p.Name, "Details", "Product", new { p.Id }, new { @class = "btn btn-primary btn-sm", title = "Edit " + p.Name })
+                                        </b>);
+
+                                /* Adding action link to category detail column: */
+                                columns.Add()
+                                        .Encoded(false)
+                                        .Sanitized(false)
+                                        .RenderValueAs(p =>
+                                        @<b>
+                                            @Html.ActionLink("Delete " + p.Name, "Details", "Product", new { p.Id }, new { @class = "btn btn-primary btn-sm", title = "Delete " + p.Name })
                                         </b>);
 
                                 /* Adding "Name" column: */
@@ -345,15 +389,6 @@
                                     .Sanitized(false)
                                     .SetWidth(40)
                                     .RenderValueAs(o => Html.EditorFor(c => o.IsDeleted, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } }));
-
-                                /* Adding not mapped column, that renders body, using inline Razor html helper */
-                                columns.Add()
-                                .Encoded(false)
-                                .Sanitized(false)
-                                .RenderValueAs(p =>
-                                @<b>
-                                    @Html.ActionLink("Create " + Model.Category.Name + " Product", "Create", "Product", new { categoryId = Model.Category.Id }, new { @class = "btn btn-primary btn-sm" })
-                                </b>);
 
                             }).SetRowCssClasses(item => item.IsDeleted ? "warning" : string.Empty).WithPaging(Model.ProductRowsPerCategory).Sortable().Filterable().WithMultipleFilters().Selectable(false)
                         </div>
