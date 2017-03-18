@@ -26,5 +26,8 @@ namespace AcleUrbanGardens.Web.Models
                 { "5", "5" },
                 { "1", "1" }
             };
+
+        // set to false when live 
+        public static readonly bool SHOW_HISTORICAL_DATA = false;
     }
 }

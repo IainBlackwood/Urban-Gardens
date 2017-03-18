@@ -11,7 +11,11 @@ namespace AcleUrbanGardens.Web.Models
     {
         public virtual IEnumerable<Category> Categories { get; set; }
         public virtual int RowsPerPage { get; set; }
-        public Dictionary<string, string> RowOptions { get; set; }
+        public virtual Dictionary<string, string> RowOptions { get; set; }
+
+        [Display(Name = "Show Historical Data")]
+        public virtual bool? ShowHistoricalData { get; set; }
+        public virtual List<ApplicationUser> Users { get; set; }
     }
 
     public class CreateCategoryViewModel
@@ -95,6 +99,9 @@ namespace AcleUrbanGardens.Web.Models
         public virtual Category Category { get; set; }
 
         [Required]
+        public virtual Category Parent { get; set; }
+
+        [Required]
         public virtual string UnassignedCategory { get; set; }
 
         [Required]
@@ -110,6 +117,10 @@ namespace AcleUrbanGardens.Web.Models
         [Required]
         [Display(Name = "Updated By")]
         public virtual string UpdatedByUsername { get; set; }
+
+        public virtual int ProductRowsPerCategory { get; set; }
+        public virtual int SubCategoryRowsPerCategory { get; set; }
+        public Dictionary<string, string> RowOptions { get; set; }
 
     }
 
@@ -128,8 +139,8 @@ namespace AcleUrbanGardens.Web.Models
         [Display(Name = "Updated By")]
         public virtual string UpdatedByUsername { get; set; }
 
-        public virtual int SubCategoryRowsPerCategory { get; set; }
         public virtual int ProductRowsPerCategory { get; set; }
+        public virtual int SubCategoryRowsPerCategory { get; set; }
         public Dictionary<string, string> RowOptions { get; set; }
     }
 
@@ -144,6 +155,14 @@ namespace AcleUrbanGardens.Web.Models
 
         [Required]
         public virtual string Description { get; set; }
+
+        [Required]
+        [Display(Name = "Image")]
+        public virtual string ImagePath { get; set; }
+
+        [Required]
+        [Display(Name = "Deleted")]
+        public virtual bool IsDeleted { get; set; }
 
         [Required]
         [HiddenInput(DisplayValue = false)]
@@ -164,6 +183,5 @@ namespace AcleUrbanGardens.Web.Models
         [HiddenInput(DisplayValue = false)]
         [Display(Name = "Update Date")]
         public virtual DateTime? UpdateDate { get; set; }
-
     }
 }

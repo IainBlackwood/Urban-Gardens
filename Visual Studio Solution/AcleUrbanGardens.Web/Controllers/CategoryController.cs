@@ -16,7 +16,7 @@ namespace AcleUrbanGardens.Web.Controllers
     public class CategoryController : Controller
     {
         private AcleUrbanGardensDb _db;
-        private static ApplicationDbContext _applicationDb;
+        private ApplicationDbContext _applicationDb;
 
         public CategoryController(AcleUrbanGardensDb db, ApplicationDbContext applicationDb)
         {
@@ -25,21 +25,28 @@ namespace AcleUrbanGardens.Web.Controllers
         }
 
         // GET: Category
-        public ActionResult Index(int? numRows)
+        public ActionResult Index(int? numRows, bool? showHistoricalData)
         {
             if (numRows == null)
             {
                 // set default of X per page (we can choose something suitable 0 gets all) 
-                numRows = 0;
+                numRows = 10;
+            }
+
+            if (showHistoricalData == null)
+            {
+                // set default of X per page (we can choose something suitable 0 gets all) 
+                showHistoricalData = Models.Constants.SHOW_HISTORICAL_DATA;
             }
 
             var viewModel = new IndexCategoryViewModel();
-            //viewModel.NumRowsToDisplay = numberOfRowsPerPageOptions;
+            viewModel.Users = _applicationDb.Users.ToList();
             viewModel.Categories = _db.Categories.ToList().Where(c => c.ParentId == null).OrderBy(c => c.Name);
             viewModel.RowsPerPage = Convert.ToInt32(numRows);
-
-
             viewModel.RowOptions = Models.Constants.ROW_OPTIONS;
+            viewModel.ShowHistoricalData = showHistoricalData;
+            
+            
             return View(viewModel);
         }
 
@@ -79,7 +86,7 @@ namespace AcleUrbanGardens.Web.Controllers
             {
                 viewModel.Parent = _db.Categories.Find(category.ParentId);
             }
-
+        
             if(category.CreatedBy != null)
                 viewModel.CreatedByUsername = _applicationDb.Users.Find(category.CreatedBy).UserName;
 
@@ -179,6 +186,8 @@ namespace AcleUrbanGardens.Web.Controllers
                 Id = category.Id,
                 Name = category.Name,
                 Description = category.Description,
+                ImagePath = category.ImagePath,
+                IsDeleted = category.IsDeleted,
                 CreateDate = category.CreateDate,
                 CreatedBy = category.CreatedBy,
                 UpdateDate = category.UpdateDate,
@@ -193,13 +202,15 @@ namespace AcleUrbanGardens.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,CreatedBy,CreateDate,UpdatedBy,UpdateDate")] EditCategoryViewModel categoryViewModel)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,ImagePath,IsDeleted,CreatedBy,CreateDate,UpdatedBy,UpdateDate")] EditCategoryViewModel categoryViewModel)
         {
             if (ModelState.IsValid)
             {
                 var category = new Category();
                 category.Id = categoryViewModel.Id;
                 category.Name = categoryViewModel.Name;
+                category.ImagePath = categoryViewModel.ImagePath;
+                category.IsDeleted = categoryViewModel.IsDeleted;
                 category.Description = categoryViewModel.Description;
                 category.CreateDate = categoryViewModel.CreateDate;
                 category.CreatedBy = categoryViewModel.CreatedBy;
@@ -213,7 +224,8 @@ namespace AcleUrbanGardens.Web.Controllers
         }
 
         // GET: Category/Delete/5
-        public ActionResult Delete(int? id)
+        [HttpGet]
+        public ActionResult Delete(int? id, int? subCatNumRows, int? prodNumRows)
         {
             // if no id was supplied
             if (id == null)
@@ -239,51 +251,101 @@ namespace AcleUrbanGardens.Web.Controllers
             }
             else
             {
-                // create the delete category view model
-                var viewModel = new DeleteCategoryViewModel
-                {
-                    // create the category 
-                    Category = new Category
-                    {
-                        // assign the category values to the view model
-                        Id = category.Id,
-                        Name = category.Name,
-                        Description = category.Description,
-                        Products = category.Products,
-                        CreateDate = category.CreateDate,
-                        CreatedBy = category.CreatedBy,
-                        UpdateDate = category.UpdateDate,
-                        UpdatedBy = category.UpdatedBy
-                    },
-                    // set some values to handle unassigned products
-                    UnassignedCategoryId = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id,
-                    UnassignedCategory = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Name
-                };
-
-                // get the main category we are looking at list of products
-                viewModel.Products = _db.Products.Where(p => p.CategoryId == id).ToList();
-
-                viewModel.Category.Children = _db.Categories.Where(c => c.ParentId == id).OrderBy(c => c.Name).ToList();
-                // if we got some children 
-                if (viewModel.Category.Children.Count > 0)
-                {
-                    // get any further sub categories
-                    viewModel.Category.Children = GetChildren(viewModel.Category.Children, id);
-                }
-
-                // set the created by username / email value
-                if (category.CreatedBy != null)
-                    viewModel.CreatedByUsername = _applicationDb.Users.Find(category.CreatedBy).UserName;
-
-                // set the updated by username / email value
-                if (category.UpdatedBy != null)
-                    viewModel.UpdatedByUsername = _applicationDb.Users.Find(category.UpdatedBy).UserName;
-                else
-                    viewModel.UpdatedByUsername = string.Empty;
-
                 // return the model to the view
-                return View(viewModel);
+                return View(GetDeleteCategoryViewModel(id, subCatNumRows, prodNumRows, category));
             }
+        }
+
+        private DeleteCategoryViewModel GetDeleteCategoryViewModel(int? id, int? subCatNumRows, int? prodNumRows, Category category)
+        {
+            DeleteCategoryViewModel viewModel = InitializeDeleteCategoryViewModel(category);
+            viewModel = GetDeleteCategoryDataFromDB(id, category, ref viewModel);
+            viewModel = GetGridRowData(subCatNumRows, prodNumRows, ref viewModel);
+
+            return viewModel;
+        }
+
+        private DeleteCategoryViewModel InitializeDeleteCategoryViewModel(Category category)
+        {
+            // create the delete category view model
+            var viewModel = new DeleteCategoryViewModel
+            {
+                // create the category 
+                Category = new Category
+                {
+                    // assign the category values to the view model
+                    Id = category.Id,
+                    Name = category.Name,
+                    Description = category.Description,
+                    ImagePath = category.ImagePath,
+                    Products = category.Products,
+                    CreateDate = category.CreateDate,
+                    CreatedBy = category.CreatedBy,
+                    UpdateDate = category.UpdateDate,
+                    UpdatedBy = category.UpdatedBy,
+                    IsDeleted = category.IsDeleted
+                },
+                // set some values to handle unassigned products
+                UnassignedCategoryId = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id,
+                UnassignedCategory = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Name
+            };
+            return viewModel;
+        }
+
+        private DeleteCategoryViewModel GetDeleteCategoryDataFromDB(int? id, Category category, ref DeleteCategoryViewModel viewModel)
+        {
+            // if we are a child category (sub-category)
+            if (category.ParentId != null)
+            {
+                viewModel.Parent = _db.Categories.Find(category.ParentId);
+            }
+
+            // get the main category we are looking at's list of products
+            viewModel.Products = _db.Products.Where(p => p.CategoryId == id).ToList();
+
+            // get any sub categories
+            viewModel.Category.Children = _db.Categories.Where(c => c.ParentId == id).OrderBy(c => c.Name).ToList();
+            // if we got some children 
+            if (viewModel.Category.Children.Count > 0)
+            {
+                // get any further sub categories
+                viewModel.Category.Children = GetChildren(viewModel.Category.Children, id);
+            }
+
+            // set the created by username / email value
+            if (category.CreatedBy != null)
+                viewModel.CreatedByUsername = _applicationDb.Users.Find(category.CreatedBy).UserName;
+
+            // set the updated by username / email value
+            if (category.UpdatedBy != null)
+                viewModel.UpdatedByUsername = _applicationDb.Users.Find(category.UpdatedBy).UserName;
+            else
+                viewModel.UpdatedByUsername = string.Empty;
+
+            return viewModel;
+        }       
+
+        private static DeleteCategoryViewModel GetGridRowData(int? subCatNumRows, int? prodNumRows, ref DeleteCategoryViewModel viewModel)
+        {
+            // ensure we have a value
+            if (subCatNumRows == null)
+            {
+                // set default of X per page (we can choose something suitable 0 gets all) 
+                subCatNumRows = 5;
+            }
+
+            // ensure we have a value
+            if (prodNumRows == null)
+            {
+                // set default of X per page (we can choose something suitable 0 gets all) 
+                prodNumRows = 5;
+            }
+
+            viewModel.SubCategoryRowsPerCategory = Convert.ToInt32(subCatNumRows);
+            viewModel.ProductRowsPerCategory = Convert.ToInt32(prodNumRows);
+            viewModel.RowOptions = Models.Constants.SMALL_GRID_ROW_OPTIONS;
+
+            return viewModel;
         }
 
         [HttpGet]
@@ -313,10 +375,12 @@ namespace AcleUrbanGardens.Web.Controllers
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
+                    ImagePath = category.ImagePath,
                     CreatedBy = category.CreatedBy,
                     CreateDate = category.CreateDate,
                     UpdatedBy = category.UpdatedBy,
                     UpdateDate = category.UpdateDate,
+                    IsDeleted = category.IsDeleted,
                     Products = category.Products
                 }
             };
@@ -347,7 +411,7 @@ namespace AcleUrbanGardens.Web.Controllers
                 return HttpNotFound();
             }
 
-            // get list of products
+            // get list of productsthat are linked to the category
             var products = _db.Products.Where(p => p.CategoryId == id);
             int unassignedCategoryId = _db.Categories.Single(c => c.Name == Models.Constants.CATEGORY_UNASSIGNED_PRODUCTS).Id;
 
