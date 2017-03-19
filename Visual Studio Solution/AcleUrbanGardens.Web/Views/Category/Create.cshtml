@@ -1,50 +1,167 @@
-﻿@model AcleUrbanGardens.Web.Models.CreateCategoryViewModel
+﻿@using AcleUrbanGardens.Web.Models;
+@using AcleUrbanGardens.Web.Helpers;
+@model CreateCategoryViewModel
 
 @{
     ViewBag.Title = "Create a new Category";
 }
+<script>
+    function setNameHiddenField()
+    {
+        var display = document.getElementById("Name");
+        var hidden = document.getElementById("NameHidden");
+        hidden.value = display.value;
+    }
+    function setDescriptionHiddenField() {
+        var display = document.getElementById("Description");
+        var hidden = document.getElementById("DescriptionHidden");
+        hidden.value = display.value;
+    }
+    function setIsDeletedHiddenField() {
+        var display = document.getElementById("IsDeleted");
+        var hidden = document.getElementById("IsDeletedHidden");
+        
+        if (display.checked) {
+            hidden.checked = true;
+        }
+        else
+        {
+            hidden.checked = false;
+        }
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>@ViewBag.Title</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    }
+</script>
+
+<div class="container" id="create">
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-2">
+            <div id="categoryTreeView" class="jumbotron container-fluid" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);">
+                <p>Category tree view</p>
+                @RenderCategoryTreeView()
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+        <div class="col-lg-10 col-md-10 col-sm-10">
+            <div class="container">
+                <div id="categorycreate" class="jumbotron container-fluid" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);">
+                    @RenderCategoryCreate()
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!--hidden fields no need for formatting-->
-    @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
-    @Html.EditorFor(model => model.CreateDate, new { htmlAttributes = new { @class = "form-control" } })
-    @Html.EditorFor(model => model.UpdatedBy, new { htmlAttributes = new { @class = "form-control" } })
-    @Html.EditorFor(model => model.UpdateDate, new { htmlAttributes = new { @class = "form-control" } })
+@helper RenderCategoryTreeView()
+{
+    <p>TODO: create the tree view!</p>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+@helper RenderCategoryCreate()
+{
+    <h2>@ViewBag.Title</h2>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            @using (Html.BeginForm("Create", "Category", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", onkeyup = "setNameHiddenField()" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", onkeyup = "setDescriptionHiddenField()" } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ImagePath, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ImagePath, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.ImagePath, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IsDeleted, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.IsDeleted, new { htmlAttributes = new { @class = "form-control", onchange = "setIsDeletedHiddenField()" } })
+                            @Html.ValidationMessageFor(model => model.IsDeleted, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10" style="text-align: right">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+
+                <!--hidden fields no need for formatting-->
+                @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.CreateDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.UpdatedBy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.UpdateDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.ImageIsInserted, new { htmlAttributes = new { @class = "form-control" } })
+            }
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-12" style="border: 1px solid gray; border-radius: 5px; max-width:500px;">
+                        @{  if (Model.ImageIsInserted)
+                            {
+                                <img src="~/Content/Images/temp/@Model.ImagePath" style="max-width: 100%; height: auto; width: auto\9;" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/Images/@Model.ImagePath" style="max-width: 100%; height: auto; width: auto\9;" />
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" style="border: 1px solid gray; border-radius: 5px;">
+                        @using (Html.BeginForm("InsertImage", "Category", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { id = "NameHidden" } })
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { id = "DescriptionHidden" } })
+                            @Html.CheckBoxFor(model => model.IsDeleted, new { id = "IsDeletedHidden" })
+                            <label for="file">Upload Image:</label>
+                                <input type="file" name="file" id="file" class="btn-group" /><br>
+                                <input type="submit" value="Upload Image" class="btn btn-primary btn-sm" />
+                                <br><br>
+                                @ViewBag.Message
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <div>
+                        @Html.ActionLink("Back to Categories", "Index", "Category", null, new { @class = "btn btn-primary", title = "Back to Categories" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+
+        </div>
+    </div>
+}
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace AcleUrbanGardens.Web.Models
@@ -27,6 +28,14 @@ namespace AcleUrbanGardens.Web.Models
         public virtual string Description { get; set; }
 
         [Required]
+        [Display(Name = "Image")]
+        public virtual string ImagePath { get; set; }
+
+        [Required]
+        [Display(Name = "Deleted")]
+        public virtual bool IsDeleted { get; set; }
+
+        [Required]
         [HiddenInput(DisplayValue = false)]
         [Display(Name = "Created By")]
         public virtual string CreatedBy { get; set; }
@@ -45,6 +54,9 @@ namespace AcleUrbanGardens.Web.Models
         [HiddenInput(DisplayValue = false)]
         [Display(Name = "Update Date")]
         public virtual DateTime? UpdateDate { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public virtual bool ImageIsInserted { get; set; }
     }
 
     public class CreateSubCategoryViewModel
@@ -183,5 +195,8 @@ namespace AcleUrbanGardens.Web.Models
         [HiddenInput(DisplayValue = false)]
         [Display(Name = "Update Date")]
         public virtual DateTime? UpdateDate { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public virtual bool ImageIsUpdated { get; set; }
     }
 }
