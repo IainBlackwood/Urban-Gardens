@@ -43,7 +43,7 @@ namespace AcleUrbanGardens.Web.Controllers
 
             var viewModel = new IndexCategoryViewModel();
             viewModel.Users = _applicationDb.Users.ToList();
-            viewModel.Categories = _db.Categories.ToList().Where(c => c.ParentId == null).OrderBy(c => c.Name);
+            viewModel.Categories = _db.Categories.ToList().Where(c => c.ParentId == null || c.ParentId == 1).OrderBy(c => c.Name);
             viewModel.RowsPerPage = Convert.ToInt32(numRows);
             viewModel.RowOptions = Models.Constants.ROW_OPTIONS;
             viewModel.ShowHistoricalData = showHistoricalData;
@@ -220,6 +220,7 @@ namespace AcleUrbanGardens.Web.Controllers
 
             return View("Create", viewModel);
         }
+
         [HttpPost]
         public ActionResult UpdateImage(int? id, HttpPostedFileBase file)
         {
@@ -243,24 +244,28 @@ namespace AcleUrbanGardens.Web.Controllers
                 CreateDate = category.CreateDate,
                 CreatedBy = category.CreatedBy,
                 UpdateDate = category.UpdateDate,
-                UpdatedBy = category.UpdatedBy
-            };
+                UpdatedBy = category.UpdatedBy,
+                ImagePath = category.ImagePath
+        };
 
             if (file != null && file.ContentLength > 0)
                 try
                 {
-                    if (System.IO.File.Exists(Path.Combine(Server.MapPath("~/Content/Images"), Path.GetFileName(file.FileName))))
+                    // if the filename is the same as the entity name
+                    if (string.Equals(file.FileName.Split('.')[0].ToLower(), category.Name.ToLower()))
                     {
-                        ViewBag.Message = "The file already exists on the sever. Please choose another file";
+                        // clear the temp folder of any old files left here
+                        clearFolder(Server.MapPath("~/Content/Images/Temp"));
+                        file.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/Temp"), Path.GetFileName(file.FileName)));
+                        viewModel.ImageIsUpdated = true;
+                        viewModel.ImagePath = file.FileName;
+                        ViewBag.Message = "File uploaded successfully. You must save the record to complete this action";
+                    }
+                    else
+                    {
+                        ViewBag.Message = "The filename must be the same as the category name.";
                         return View("Edit", viewModel);
                     }
-
-                    // clear the temp folder of any old files left here
-                    clearFolder(Server.MapPath("~/Content/Images/Temp"));
-                    file.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/Temp"), Path.GetFileName(file.FileName)));
-                    viewModel.ImageIsUpdated = true;
-                    viewModel.ImagePath = file.FileName;
-                    ViewBag.Message = "File uploaded successfully. You must save the record to complete this action";
                 }
                 catch (Exception ex)
                 {
@@ -563,6 +568,7 @@ namespace AcleUrbanGardens.Web.Controllers
             return View(viewModel);
         }
 
+
         // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -600,14 +606,51 @@ namespace AcleUrbanGardens.Web.Controllers
                 _db.Entry(childCategory).State = EntityState.Modified;
             }
 
+            if (!DeleteImage(category.ImagePath))
+            {
+                // TODO: Look at getting subCatNumRows and prodNumRows
+                return View(GetDeleteCategoryViewModel(id, 0, 0, category));
+            }
+
             // finally delete the category (Set the IsDeleted Flag)
             //_db.Categories.Remove(category);
+            category.ImagePath = System.IO.Path.Combine("deleted", category.ImagePath);
             category.IsDeleted = true;
             _db.Entry(category).State = EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
+        private bool DeleteImage(string imagePath)
+        {
+            try
+            {
+                // if we have a value 
+                if (!string.IsNullOrEmpty(imagePath))
+                {
+                    // if the file exists
+                    if (System.IO.File.Exists(Path.Combine(Server.MapPath("~/Content/Images"), Path.GetFileName(imagePath))))
+                    {
+                        // "delete it"
+                        // move the file from Images to deleted
+                        System.IO.File.Move(Path.Combine(Server.MapPath("~/Content/Images"), Path.GetFileName(imagePath)),
+                                Path.Combine(Server.MapPath("~/Content/Images/deleted"), Path.GetFileName(imagePath)));
+                    }
+                }
+
+                return true;
+            }
+            catch (IOException ioe)
+            {
+                ViewBag.Message = ioe.Message;
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.Message;
+            }
+
+            return false;
+        }
 
         [HttpGet]
         public ActionResult CreateSubCategory([Bind(Include = "CategoryId")] int? categoryId)

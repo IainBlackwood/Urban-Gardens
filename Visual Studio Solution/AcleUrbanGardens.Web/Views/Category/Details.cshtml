@@ -121,8 +121,8 @@
         </div>
         <div class="col-lg-5 col-md-5 col-sm-5">
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    @Html.ActionImage("Details", "Category", new { Model.Category.Id }, "~/Content/Images/" + Model.Category.ImagePath, Model.Category.ImagePath, "80%", "80%")
+                <div class="col-lg-12 col-md-12 col-sm-12" style="max-width: 400px;">
+                    @Html.ActionImage("Details", "Category", new { Model.Category.Id }, "~/Content/Images/" + Model.Category.ImagePath, Model.Category.ImagePath, new { style = @"max-width: 100%; height: auto; width: auto\9;", alt = "testing" })
                 </div>
             </div>
         </div>

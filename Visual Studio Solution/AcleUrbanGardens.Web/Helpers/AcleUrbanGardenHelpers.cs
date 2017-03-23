@@ -28,5 +28,38 @@ namespace AcleUrbanGardens.Web.Helpers
 
             return MvcHtmlString.Create(anchorHtml);
         }
+
+        public static MvcHtmlString ActionImage(this HtmlHelper html, string action, string controller, object routeValues, string imagePath, string alt, object htmlAttributes)
+        {
+            var url = new UrlHelper(html.ViewContext.RequestContext);
+            // build the <img> tag
+            var imgBuilder = new TagBuilder("img");
+            imgBuilder.MergeAttribute("src", url.Content(imagePath));
+            imgBuilder.MergeAttribute("alt", alt);
+            // get the html attributes
+            var attributes = htmlAttributes.ToString().Replace('{', ' ').Replace('}', ' ').Trim().Split(',');
+            // example html attribute
+            // style = @"max-width: 100%; height: auto; width: auto\9;"
+            foreach(var attribute in attributes)
+            {
+                string key = attribute.Trim().Split('=')[0];
+                string value = attribute.Trim().Split('=')[1];
+                imgBuilder.MergeAttribute(key.Trim(), value.Trim());
+            }
+
+
+
+            imgBuilder.MergeAttribute("src", url.Content(imagePath));
+            imgBuilder.MergeAttribute("alt", alt);
+            string imgHtml = imgBuilder.ToString(TagRenderMode.SelfClosing);
+
+            // build the <a> tag
+            var anchorBuilder = new TagBuilder("a");
+            anchorBuilder.MergeAttribute("href", url.Action(action, controller, routeValues));
+            anchorBuilder.InnerHtml = imgHtml; // include the <img> tag inside
+            string anchorHtml = anchorBuilder.ToString(TagRenderMode.Normal);
+
+            return MvcHtmlString.Create(anchorHtml);
+        }
     }
 }
