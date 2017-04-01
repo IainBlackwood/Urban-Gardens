@@ -1,0 +1,24 @@
+Current Tasks
+
+Categories
+
+1 Fix Categories Image issues (What to do when deleting categories LOGIC)
+2 Fix issues with populating subactegories and products in details sub-lists (LOGIC)
+3 Add Category Descriptions and and Images (Need to make an image for each Category/Sub-Category
+4 Build Category Navigation Panel
+5 Create fast admin for category management (Excel upload - INSERT, UPDATE, DELETE)
+6 Test Categories
+
+Products
+
+1 Build Product class (Define fields)
+2 Build/Refactor Product Pages (Index, Details, Edit, Delete)
+3 Create fast admin for product management (Excel upload - INSERT, UPDATE, DELETE)
+4 Test Products
+
+Brands
+
+1 Build Brand class (Define fields)
+2 Build Brand Pages (Index, Details, Edit, Delete)
+3 Create fast admin for brand management (Excel upload - INSERT, UPDATE, DELETE)
+4 Test brands.
