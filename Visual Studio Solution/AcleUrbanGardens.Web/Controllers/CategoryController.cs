@@ -43,7 +43,7 @@ namespace AcleUrbanGardens.Web.Controllers
 
             var viewModel = new IndexCategoryViewModel();
             viewModel.Users = _applicationDb.Users.ToList();
-            viewModel.Categories = _db.Categories.ToList().Where(c => c.ParentId == null || c.ParentId == 1).OrderBy(c => c.Name);
+            viewModel.Categories = _db.Categories.ToList().Where(c => c.ParentId == null).OrderBy(c => c.Name);
             viewModel.RowsPerPage = Convert.ToInt32(numRows);
             viewModel.RowOptions = Models.Constants.ROW_OPTIONS;
             viewModel.ShowHistoricalData = showHistoricalData;
