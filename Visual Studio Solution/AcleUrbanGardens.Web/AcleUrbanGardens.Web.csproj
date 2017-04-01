@@ -312,7 +312,6 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Helpers\AcleUrbanGardenHelpers.cs" />
-    <None Include="Migrations\AcleUrbanGardensDbContext\Configuration.cs.old" />
     <Compile Include="Migrations\AcleUrbanGardensDbContext\Configuration.cs" />
     <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
     <Compile Include="Models\CategoryViewModels.cs" />
