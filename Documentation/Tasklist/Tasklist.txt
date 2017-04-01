@@ -15,6 +15,7 @@ Products
 2 Build/Refactor Product Pages (Index, Details, Edit, Delete)
 3 Create fast admin for product management (Excel upload - INSERT, UPDATE, DELETE)
 4 Test Products
+5 Get descriptions and images from wholesalers or producers of products
 
 Brands
 
